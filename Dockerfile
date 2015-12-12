@@ -30,7 +30,14 @@ RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VER
 	&& rm wordpress.tar.gz \
 	&& chown -R www-data:www-data /var/www/wordpress
 
-COPY docker-entrypoint.sh /entrypoint.sh
+COPY /bin/docker-entrypoint.sh /entrypoint.sh
+
+# install wp-cli, http://wp-cli.org
+ENV WP_CLI_CONFIG_PATH /var/www/wp-cli.yml
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
+    chmod +x wp-cli.phar && \
+    mv wp-cli.phar /usr/local/bin/wp && \
+    wp --info --allow-root
 
 # grr, ENTRYPOINT resets CMD now
 ENTRYPOINT ["/entrypoint.sh"]

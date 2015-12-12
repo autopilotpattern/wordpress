@@ -79,5 +79,5 @@ define( 'STAGING_DOMAIN', '%%WP_STAGING_DOMAIN%%' ); // Does magic in WP Stack t
 // Bootstrap WordPress
 // ===================
 if ( !defined( 'ABSPATH' ) )
-	define( 'ABSPATH', dirname( __FILE__ ) . '/wp/' );
+	define( 'ABSPATH', dirname( __FILE__ ) . '/wordpress/' );
 require_once( ABSPATH . 'wp-settings.php' );

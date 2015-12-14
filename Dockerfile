@@ -23,34 +23,39 @@ RUN { \
         echo 'opcache.enable_cli=1'; \
     } > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
-VOLUME /var/www
+COPY /bin/docker-entrypoint.sh /entrypoint.sh
 
-# Install WordPress
+# copy the WordPress skeleton from this repo into the container
+# this includes any themes and/or plugins we've added to the content/themes and content/plugins, etc, directories.
+COPY /var/www/html /var/www/html
+
+# install WordPress
 ENV WORDPRESS_VERSION 4.3.1
 ENV WORDPRESS_SHA1 b2e5652a6d2333cabe7b37459362a3e5b8b66221
-# upstream tarballs include ./wordpress/ so this gives us /var/www/wordpress
+# upstream tarballs include ./wordpress/ so this gives us /var/www/html/wordpress
 RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VERSION}.tar.gz \
     && echo "$WORDPRESS_SHA1 *wordpress.tar.gz" | sha1sum -c - \
-    && tar -xzf wordpress.tar.gz -C /var/www/ \
+    && tar -xzf wordpress.tar.gz -C /var/www/html \
     && rm wordpress.tar.gz \
-    && chown -R www-data:www-data /var/www/wordpress
-
-COPY /bin/docker-entrypoint.sh /entrypoint.sh
+    && chown -R www-data:www-data /var/www/html/wordpress
 
 # install HyperDB, https://wordpress.org/plugins/hyperdb
 ENV HYPERDB_TAG 1.1
-RUN curl -Lo /var/www/hyperdb.zip https://downloads.wordpress.org/plugin/hyperdb.${HYPERDB_TAG}.zip \
+RUN curl -Lo /var/www/html/hyperdb.zip https://downloads.wordpress.org/plugin/hyperdb.${HYPERDB_TAG}.zip \
     && unzip hyperdb.zip \
-    && chown -R www-data:www-data /var/www/hyperdb \
-    && mv hyperdb/db.php /var/www/wordpress/content/. \
-    && rm -rf /var/www/hyperdb.zip /var/www/hyperdb
+    && chown -R www-data:www-data /var/www/html/hyperdb \
+    && mv hyperdb/db.php /var/www/html/wordpress/content/. \
+    && rm -rf /var/www/html/hyperdb.zip /var/www/html/hyperdb
 
 # install wp-cli, http://wp-cli.org
-ENV WP_CLI_CONFIG_PATH /var/www/wp-cli.yml
+ENV WP_CLI_CONFIG_PATH /var/www/html/wp-cli.yml
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
     && chmod +x wp-cli.phar \
     && mv wp-cli.phar /usr/local/bin/wp \
     && wp --info --allow-root
+
+# the volume is defined after we install everything
+VOLUME /var/www/html
 
 # grr, ENTRYPOINT resets CMD now
 ENTRYPOINT ["/entrypoint.sh"]

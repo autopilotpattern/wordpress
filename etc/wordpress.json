@@ -15,6 +15,11 @@
       "name": "mysql",
       "poll": 7,
       "onChange": "/opt/containerbuddy/wp-config.sh"
+    },
+    {
+      "name": "memcached",
+      "poll": 11,
+      "onChange": "/opt/containerbuddy/wp-config.sh"
     }
   ]
 }

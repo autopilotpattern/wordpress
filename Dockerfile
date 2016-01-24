@@ -29,18 +29,20 @@ COPY /bin/docker-entrypoint.sh /entrypoint.sh
 COPY containerbuddy /opt/containerbuddy
 
 # Install Containerbuddy
+# Releases at https://github.com/joyent/containerbuddy/releases
 ENV CONTAINERBUDDY_VERSION 0.1.1
-ENV CONTAINERBUDDY_SHA 3163e89d4c95b464b174ba31733946ca247e068e
+ENV CONTAINERBUDDY_SHA1 3163e89d4c95b464b174ba31733946ca247e068e
 RUN curl --retry 7 -Lso /tmp/containerbuddy.tar.gz "https://github.com/joyent/containerbuddy/releases/download/${CONTAINERBUDDY_VERSION}/containerbuddy-${CONTAINERBUDDY_VERSION}.tar.gz" \
-    && echo "${CONTAINERBUDDY_SHA}  /tmp/containerbuddy.tar.gz" | sha1sum -c \
+    && echo "${CONTAINERBUDDY_SHA1}  /tmp/containerbuddy.tar.gz" | sha1sum -c \
     && tar zxf /tmp/containerbuddy.tar.gz -C /opt/containerbuddy \
     && rm /tmp/containerbuddy.tar.gz
 
 # Install Consul template
+# Releases are at https://releases.hashicorp.com/consul-template/
 ENV CONSUL_TEMPLATE_VERSION 0.12.2
-ENV CONSUL_TEMPLATE_SHA a8780f365bf5bfad47272e4682636084a7475ce74b336cdca87c48a06dd8a193
+ENV CONSUL_TEMPLATE_SHA1 a8780f365bf5bfad47272e4682636084a7475ce74b336cdca87c48a06dd8a193
 RUN curl --retry 7 -Lso /tmp/consul-template.zip "https://releases.hashicorp.com/consul-template/${CONSUL_TEMPLATE_VERSION}/consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip" \
-    && echo "${CONSUL_TEMPLATE_SHA}  /tmp/consul-template.zip" | sha256sum -c \
+    && echo "${CONSUL_TEMPLATE_SHA1}  /tmp/consul-template.zip" | sha256sum -c \
     && unzip /tmp/consul-template.zip -d /usr/local/bin \
     && rm /tmp/consul-template.zip
 
@@ -52,8 +54,9 @@ COPY /var/www/html /var/www/html
 RUN chown -R www-data:www-data /var/www/html/content/uploads
 
 # install WordPress
-ENV WORDPRESS_VERSION 4.3.1
-ENV WORDPRESS_SHA1 b2e5652a6d2333cabe7b37459362a3e5b8b66221
+# Releases at https://wordpress.org/download/release-archive/
+ENV WORDPRESS_VERSION 4.4.1
+ENV WORDPRESS_SHA1 89bcc67a33aecb691e879c818d7e2299701f30e7
 # upstream tarballs include ./wordpress/ so this gives us /var/www/html/wordpress
 RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VERSION}.tar.gz \
     && echo "${WORDPRESS_SHA1} *wordpress.tar.gz" | sha1sum -c - \

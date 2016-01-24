@@ -5,6 +5,7 @@ RUN a2enmod rewrite
 # install the PHP extensions we need, and other packages
 RUN apt-get update \
     && apt-get install -y \
+        less \
         libpng12-dev \
         libjpeg-dev \
         unzip \
@@ -38,7 +39,7 @@ RUN curl --retry 7 -Lso /tmp/containerbuddy.tar.gz "https://github.com/joyent/co
     && rm /tmp/containerbuddy.tar.gz
 
 # Install Consul template
-# Releases are at https://releases.hashicorp.com/consul-template/
+# Releases at https://releases.hashicorp.com/consul-template/
 ENV CONSUL_TEMPLATE_VERSION 0.12.2
 ENV CONSUL_TEMPLATE_SHA1 a8780f365bf5bfad47272e4682636084a7475ce74b336cdca87c48a06dd8a193
 RUN curl --retry 7 -Lso /tmp/consul-template.zip "https://releases.hashicorp.com/consul-template/${CONSUL_TEMPLATE_VERSION}/consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip" \
@@ -64,12 +65,15 @@ RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VER
     && rm wordpress.tar.gz
 
 # install HyperDB, https://wordpress.org/plugins/hyperdb
+# Releases at https://wordpress.org/plugins/hyperdb/developers/ , though no SHA1 fingerprints are published
 ENV HYPERDB_VERSION 1.1
 RUN curl -Lo /var/www/html/hyperdb.zip https://downloads.wordpress.org/plugin/hyperdb.${HYPERDB_VERSION}.zip \
     && unzip hyperdb.zip \
     && chown -R www-data:www-data /var/www/html/hyperdb \
     && mv hyperdb/db.php /var/www/html/content/. \
-    && rm -rf /var/www/html/hyperdb.zip /var/www/html/hyperdb
+    && rm -rf /var/www/html/hyperdb.zip /var/www/html/hyperdb \
+    && touch /var/www/html/wordpress/db-config.php \
+    && ln -s /var/www/html/wordpress/db-config.php /var/www/html/.
 
 # install wp-cli, http://wp-cli.org
 ENV WP_CLI_CONFIG_PATH /var/www/html/wp-cli.yml

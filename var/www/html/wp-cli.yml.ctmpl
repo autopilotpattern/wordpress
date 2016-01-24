@@ -1,2 +1,2 @@
 path: wordpress
-url: http://example.com
+url: {{key "wordpress/config/site_url"}}

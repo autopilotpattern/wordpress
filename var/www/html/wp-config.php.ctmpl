@@ -12,10 +12,10 @@
  * The following database info is needed here, but is ignored after we load HyperDB.
  * See db-config.php.ctmpl for details.
  */
-define( 'DB_NAME', '%%DB_NAME%%' );
-define( 'DB_USER', '%%DB_USER%%' );
-define( 'DB_PASSWORD', '%%DB_PASSWORD%%' );
-define( 'DB_HOST', '%%DB_HOST%%' );
+define( 'DB_NAME',     '{{key "wordpress/config/DB_NAME"}}' );
+define( 'DB_USER',     '{{key "wordpress/config/DB_USER"}}' );
+define( 'DB_PASSWORD', '{{key "wordpress/config/DB_PASSWORD"}}' );
+define( 'DB_HOST',     '{{with index (service "dbmaster") 0}}{{.Address}}:{{.Port}}{{end}}' );
 
 /**
  * Custom Content Directory
@@ -40,14 +40,14 @@ define( 'DB_COLLATE', '' );
  *
  * Props to https://gist.github.com/earthgecko/3089509 for some hints there
  */
-define( 'AUTH_KEY',         'put your unique phrase here' );
-define( 'SECURE_AUTH_KEY',  'put your unique phrase here' );
-define( 'LOGGED_IN_KEY',    'put your unique phrase here' );
-define( 'NONCE_KEY',        'put your unique phrase here' );
-define( 'AUTH_SALT',        'put your unique phrase here' );
-define( 'SECURE_AUTH_SALT', 'put your unique phrase here' );
-define( 'LOGGED_IN_SALT',   'put your unique phrase here' );
-define( 'NONCE_SALT',       'put your unique phrase here' );
+define( 'AUTH_KEY',         '{{key "wordpress/config/AUTH_KEY"}}' );
+define( 'SECURE_AUTH_KEY',  '{{key "wordpress/config/SECURE_AUTH_KEY"}}' );
+define( 'LOGGED_IN_KEY',    '{{key "wordpress/config/LOGGED_IN_KEY"}}' );
+define( 'NONCE_KEY',        '{{key "wordpress/config/NONCE_KEY"}}' );
+define( 'AUTH_SALT',        '{{key "wordpress/config/AUTH_SALT"}}' );
+define( 'SECURE_AUTH_SALT', '{{key "wordpress/config/SECURE_AUTH_SALT"}}' );
+define( 'LOGGED_IN_SALT',   '{{key "wordpress/config/LOGGED_IN_SALT"}}' );
+define( 'NONCE_SALT',       '{{key "wordpress/config/NONCE_SALT"}}' );
 
 /**
  * Table prefix

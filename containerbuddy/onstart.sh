@@ -3,7 +3,7 @@
 # Refresh all config files in order
 #
 # This script is typically called once at the container start, but 
-# it can be called manually if config details are changed in Consul
+# it can be called manually if WP config details must be changed
 
 # The database and memcached config files are separate to avoid collisions 
 # if their backends' onChange handlers are triggered simultaneously

@@ -1,0 +1,38 @@
+wordpress:
+  extends:
+    file: common-compose.yml
+    service: wordpress
+  links:
+    - consul:consul
+  mem_limit: 512m
+  restart: never
+  build: wordpress/
+  ports:
+    - "8080:80"
+
+
+mysql:
+    extends:
+      file: common-compose.yml
+      service: mysql
+    restart: never
+    links:
+      - consul:consul
+    expose:
+      - 3306
+
+memcached:
+  extends:
+    file: common-compose.yml
+    service: memcached
+  links:
+    - consul:consul
+  restart: always
+
+consul:
+    extends:
+      file: common-compose.yml
+      service: consul
+    restart: never
+    ports:
+    - "8500:8500"

@@ -1,0 +1,26 @@
+{
+  "consul": "consul:8500",
+  "onStart": "python /entrypoint.py",
+  "services": [
+    {
+      "name": "wordpress",
+      "port": 80,
+      "publicIp": true,
+      "health": "/usr/bin/curl --fail -s http://localhost/check.html",
+      "poll": 10,
+      "ttl": 25
+    }
+  ],
+  "backends": [
+    {
+      "name": "mysql",
+      "poll": 7,
+      "onChange": "/opt/containerbuddy/wp-config.sh"
+    },
+    {
+      "name": "memcached",
+      "poll": 11,
+      "onChange": "/opt/containerbuddy/memcached.sh"
+    }
+  ]
+}

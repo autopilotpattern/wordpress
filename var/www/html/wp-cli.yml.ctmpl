@@ -1,2 +1,0 @@
-path: wordpress
-url: {{key "wordpress/config/site_url"}}

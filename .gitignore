@@ -1,3 +1,4 @@
 .DS_Store
 manta.id_rsa
 manta.id_rsa.pub
+_env

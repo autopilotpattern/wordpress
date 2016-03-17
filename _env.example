@@ -15,7 +15,7 @@ MANTA_KEY_ID=a9:cf:a8:b9:c5:70:41:54:c8:9f:27:da:cd:b3:24:b7
 MANTA_PRIVATE_KEY=$(cat manta)
 MANTA_BUCKET=/jasondewitt/stor/mysql
 
-#WORDPRESS_VERSION=4.1
+WORDPRESS_VERSION=4.1
 WORDPRESS_URL=localhost:8080
 WORDPRESS_SITE_TITLE=testsite
 WORDPRESS_ADMIN_EMAIL=jason.dewitt@10up.com

@@ -1,24 +1,23 @@
 # Environment variables for MySQL service
 MYSQL_USER=wpuser
-MYSQL_PASSWORD=4qyqAchpuMYC2jz
+MYSQL_PASSWORD=userpassword
 MYSQL_REPL_USER=repluser
-MYSQL_REPL_PASSWORD=MKmw0MEEFGddo1o
+MYSQL_REPL_PASSWORD=replpassword
 MYSQL_DATABASE=test
 
 # Environment variables for backups to Manta
-MANTA_URL=https://us-east.manta.joyent.com
-MANTA_USER=jasondewitt
-MANTA_SUBUSER=triton_mysql
-MANTA_ROLE=triton-mysql-user
-#MANTA_KEY_ID=26:98:36:b6:ea:1f:37:65:d1:1d:bc:42:a8:63:67:e8
-MANTA_KEY_ID=a9:cf:a8:b9:c5:70:41:54:c8:9f:27:da:cd:b3:24:b7
-MANTA_PRIVATE_KEY=$(cat manta)
-MANTA_BUCKET=/jasondewitt/stor/mysql
+MANTA_URL=
+MANTA_USER=
+MANTA_SUBUSER=
+MANTA_ROLE=
+MANTA_KEY_ID=
+MANTA_PRIVATE_KEY=
+MANTA_BUCKET=
 
 WORDPRESS_VERSION=4.1
 WORDPRESS_URL=localhost:8080
 WORDPRESS_SITE_TITLE=testsite
-WORDPRESS_ADMIN_EMAIL=jason.dewitt@10up.com
-WORDPRESS_ADMIN_USER=jason
-WORDPRESS_ADMIN_PASSWORD=jason
+WORDPRESS_ADMIN_EMAIL=username@domain.com
+WORDPRESS_ADMIN_USER=username
+WORDPRESS_ADMIN_PASSWORD=password
 #WORDPRESS_TEST_DATA=False

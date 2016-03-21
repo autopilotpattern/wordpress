@@ -1,3 +1,13 @@
+# Nginx as a load-balancing tier and reverse proxy
+nginx:
+  extends:
+    file: common-compose.yml
+    service: nginx
+  ports:
+  - "8080:80"
+  links:
+    - consul:consul
+
 wordpress:
   extends:
     file: common-compose.yml
@@ -8,7 +18,7 @@ wordpress:
   restart: never
   build: wordpress/
   ports:
-    - "8080:80"
+    - "80"
 
 
 mysql:

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- style derived from http://milligram.github.io
+       Copyright (c) 2015, CJ Patoilo
+       Licensed under the MIT license -->
+  <style>*,.container,:after,:before,html{box-sizing:border-box}.container,table{width:100%}body,h1,h5{font-weight:300}body,h5{line-height:1.5}html{font-size:62.5%}body{color:#001;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:1.6em;letter-spacing:.01em}.container{margin:0 auto;max-width:112rem;padding:0 2rem;position:relative}h1,h5,p{margin-top:0}blockquote,dl,figure,form,ol,p,pre,table,ul{margin-bottom:2.5rem}td,th{border-bottom:.1rem solid #e1e1e1;padding:1.2rem 1.5rem;text-align:left}td:first-child,th:first-child{padding-left:0}td:last-child,th:last-child{padding-right:0}h1,h5{margin-bottom:2rem}h1{font-size:4.5rem;letter-spacing:-.1rem;line-height:1.2}h5{font-size:2.4rem;letter-spacing:-.05rem}</style>
+  <script type="text/javascript" src="index.js"></script>
+</head>
+<body>
+
+<main class="wrapper">
+  <section class="container" id="examples">
+	<h1 class="title">Microservice Demo App</h1>
+
+	<h5 class="title">Customers</h5>
+	<p>Queries the Customers service, which makes a call to the Sales service to get data about the sales reps for each customer.</p>
+    <div class="example">
+      <table>
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Location</th>
+            <th>Sales Rep</th>
+            <th>Sales Data Source</th>
+          </tr>
+        </thead>
+        <tbody id="customerTable">
+        </tbody>
+      </table>
+    </div>
+	<h5 class="title">Sales Reps</h5>
+	<p>Queries the Sales service, which makes a call to the Customers service to get data about the customer for each sales rep.</p>
+    <div class="example">
+      <table>
+        <thead>
+          <tr>
+            <th>Sales Rep</th>
+            <th>Client</th>
+            <th>Phone</th>
+            <th>Territory</th>
+            <th>Customer Data Source</th>
+          </tr>
+        </thead>
+        <tbody id="salesRepTable">
+        </tbody>
+      </table>
+    </div>
+</body>
+</html>

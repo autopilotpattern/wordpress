@@ -84,6 +84,8 @@ RUN curl -Ls -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp
 
 ENV WORDPRESS_VERSION=${WORDPRESS_VERSION:-4.4.2}
 
+RUN echo "********** WORDPRESS_VERSION = ${WORDPRESS_VERSION} ************"
+
 # install WordPress via wp-cli
 RUN wp --allow-root core download --version=${WORDPRESS_VERSION}
 

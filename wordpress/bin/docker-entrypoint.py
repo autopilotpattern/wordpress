@@ -72,7 +72,7 @@ def on_start():
     # what to do when no password is set in _env?
     WORDPRESS_ADMIN_PASSWORD = os.environ.get("WORDPRESS_ADMIN_PASSWORD", "")
     WORDPRESS_TEST_DATA = os.environ.get("WORDPRESS_TEST_DATA", False)
-
+'''
     if WORDPRESS_VERSION in versions.keys():
         log.info("valid wordpress version requested")
     else:
@@ -86,7 +86,7 @@ def on_start():
         log.info("downloading...")
         subprocess.call("wp --allow-root core download --version={}".format(WORDPRESS_VERSION).split(), shell=False)
         # TODO fix site title so it can accept spaces
-        subprocess.call("wp --allow-root core install --url={} --title=\"{}\" --admin_user={} --admin_password={} --admin_email={} --skip-email"
+        subprocess.call("wp --allow-root core install --url={} --title='{}' --admin_user={} --admin_password={} --admin_email={} --skip-email"
                         .format(WORDPRESS_URL, WORDPRESS_SITE_TITLE, WORDPRESS_ADMIN_USER, WORDPRESS_ADMIN_PASSWORD, WORDPRESS_ADMIN_EMAIL).split())
         # update siteurl to work with our directory structure
         # wp option update for siteurl REQUIRES http://, need to determine will we handle that here
@@ -116,6 +116,7 @@ def on_start():
         subprocess.call("wp --allow-root import wptest.xml --authors=create".split())
         subprocess.call("wp --allow-root plugin uninstall wordpress-importer --deactivate".split())
         os.remove("wptest.xml")
+'''
 
 def health():
     pass

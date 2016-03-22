@@ -1,23 +1,8 @@
-# Nginx as a load-balancing tier and reverse proxy
-nginx:
-    build: nginx/
-    mem_limit: 128m
-    ports:
-    - 80:80
-    expose:
-    - 80
-    command: >
-      /bin/containerbuddy
-      -config file:///etc/containerbuddy/containerbuddy.json
-      nginx -g "daemon off;"
-
 wordpress:
   build: wordpress/
   env_file: _env
   environment:
     - CONTAINERBUDDY=file:///opt/containerbuddy/config.json
-    - WORDPRESS_VERSION=4.4.2
-    - ENV_TEST=test
 
 # MySQL designed for container-native deployment on Joyent's Triton platform.
 
@@ -37,6 +22,14 @@ memcached:
   ports:
     - 11211
 
+# Nginx as a load-balancing tier and reverse proxy
+nginx:
+    build: nginx/
+    mem_limit: 128m
+    command: >
+      /bin/containerbuddy
+      -config file:///etc/containerbuddy/containerbuddy.json
+      nginx -g "daemon off;"
 
 # ---------------------------------------------------
 # Consul as a service discovery tier

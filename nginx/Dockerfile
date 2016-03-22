@@ -6,6 +6,7 @@ RUN apk update && apk add \
     nginx \
     curl \
     unzip \
+    bash \
     && rm -rf /var/cache/apk/*
 
 # we use consul-template to re-write our Nginx virtualhost config
@@ -22,9 +23,6 @@ RUN export CB=containerbuddy-0.1.1 &&\
 
 # add Containerbuddy configuration and onChange handler
 COPY containerbuddy.json /etc/containerbuddy/
-
-# add static Nginx content
-COPY index.* /usr/share/nginx/html/
 
 # add Nginx virtualhost configuration
 COPY nginx.conf /etc/nginx/nginx.conf

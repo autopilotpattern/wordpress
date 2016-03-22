@@ -45,7 +45,7 @@ else
   # wp option update for siteurl REQUIRES http://, need to determine will we handle that here
   # or ask for it in the _env file or test for it above
   wp --allow-root option update siteurl `wp --allow-root option get siteurl`/wordpress
-  if [ $WORDPRESS_TEST_DATA=true ]
+  if [ $WORDPRESS_TEST_DATA ]
   then
     echo "installing WP test content"
     wp --allow-root plugin install wordpress-importer --activate

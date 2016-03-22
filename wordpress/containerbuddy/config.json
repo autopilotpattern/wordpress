@@ -1,12 +1,12 @@
 {
   "consul": "consul:8500",
-  "onStart": "python /entrypoint.py",
+  "onStart": "/opt/containerbuddy/onstart.sh",
   "services": [
     {
       "name": "wordpress",
       "port": 80,
       "publicIp": true,
-      "health": "/usr/bin/curl --fail -s http://localhost/check.html",
+      "health": "/opt/containerbuddy/health.sh",
       "poll": 10,
       "ttl": 25
     }
@@ -14,12 +14,12 @@
   "backends": [
     {
       "name": "mysql",
-      "poll": 7,
+      "poll": 5,
       "onChange": "/opt/containerbuddy/wp-config.sh"
     },
     {
       "name": "memcached",
-      "poll": 11,
+      "poll": 5,
       "onChange": "/opt/containerbuddy/memcached.sh"
     }
   ]

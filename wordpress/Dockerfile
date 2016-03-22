@@ -43,7 +43,7 @@ RUN curl -Ls -o /opt/get-pip.py https://bootstrap.pypa.io/get-pip.py && \
     pip install \
         python-Consul==0.4.7
 
-COPY /bin/docker-entrypoint.py /entrypoint.py
+#COPY /bin/docker-entrypoint.py /entrypoint.py
 
 # The Containerbuddy helper/glue scripts for this specific app
 COPY containerbuddy /opt/containerbuddy
@@ -68,12 +68,10 @@ RUN curl --retry 7 -Lso /tmp/consul-template.zip "https://releases.hashicorp.com
     && unzip /tmp/consul-template.zip -d /usr/local/bin \
     && rm /tmp/consul-template.zip
 
-# copy the WordPress skeleton from this repo into the container
-# this includes any themes and/or plugins we've added to the content/themes and content/plugins, etc, directories.
-COPY /var/www/html /var/www/html
+
 
 # Make the WP uploads directory writeable by the web server
-RUN chown -R www-data:www-data /var/www/html/content/uploads
+#RUN chown -R www-data:www-data /var/www/html/content/uploads
 
 # install wp-cli, http://wp-cli.org
 ENV WP_CLI_CONFIG_PATH /var/www/html/wp-cli.yml
@@ -81,6 +79,14 @@ RUN curl -Ls -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp
     && chmod +x wp-cli.phar \
     && mv wp-cli.phar /usr/local/bin/wp \
     && wp --info --allow-root
+
+
+# switch to apache user
+#USER www-data
+
+# copy the WordPress skeleton from this repo into the container
+# this includes any themes and/or plugins we've added to the content/themes and content/plugins, etc, directories.
+COPY /var/www/html /var/www/html
 
 ENV WORDPRESS_VERSION=${WORDPRESS_VERSION:-4.4.2}
 
@@ -114,15 +120,10 @@ RUN wp --allow-root core download --version=${WORDPRESS_VERSION}
 #    && ln -s /var/www/html/wordpress/db-config.php /var/www/html/.
 
 
-# install ztollman's object-cache.php and batcache's advanced-cache.php for memcached caching
-# question. does this belong here in the Dockerfile or in /content in our repo?
+# install ztollman's object-cache.php or object caching
 RUN curl -Ls -o /var/www/html/content/object-cache.php https://raw.githubusercontent.com/tollmanz/wordpress-pecl-memcached-object-cache/master/object-cache.php
-RUN curl -Ls -o /var/www/html/content/advanced-cache.php https://raw.githubusercontent.com/Automattic/batcache/master/advanced-cache.php
 
 RUN chown -R www-data:www-data /var/www/html/tools
-
-# testing apache error logs stdout
-RUN ln -sf /proc/self/fd/1 /var/log/apache2/error.log
 
 # the volume is defined after we install everything
 #VOLUME /var/www/html

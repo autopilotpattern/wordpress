@@ -41,7 +41,6 @@ RUN apt-get update \
 RUN curl -Ls -o /opt/get-pip.py https://bootstrap.pypa.io/get-pip.py && \
     python /opt/get-pip.py && \
     pip install \
-        PyMySQL==0.6.7 \
         python-Consul==0.4.7
 
 COPY /bin/docker-entrypoint.py /entrypoint.py
@@ -76,13 +75,26 @@ COPY /var/www/html /var/www/html
 # Make the WP uploads directory writeable by the web server
 RUN chown -R www-data:www-data /var/www/html/content/uploads
 
+# install wp-cli, http://wp-cli.org
+ENV WP_CLI_CONFIG_PATH /var/www/html/wp-cli.yml
+RUN curl -Ls -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+    && chmod +x wp-cli.phar \
+    && mv wp-cli.phar /usr/local/bin/wp \
+    && wp --info --allow-root
+
+# install WordPress via wp-cli
+RUN wp --allow-root core download --version=${WORDPRESS_VERSION}
+
 # install WordPress
 # Releases at https://wordpress.org/download/release-archive/
 #ENV WORDPRESS_VERSION 4.4.1
+#ENV WORDPRESS_VERSION
 #ENV WORDPRESS_SHA1 89bcc67a33aecb691e879c818d7e2299701f30e7
+## echo "$(curl -SL https://wordpress.org/wordpress-${WORDPRESS_VERSION}.tar.gz.sha1) *wordpress.tar.gz" | sha1sum -c -
 # upstream tarballs include ./wordpress/ so this gives us /var/www/html/wordpress
-#RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VERSION}.tar.gz \
-#    && echo "${WORDPRESS_SHA1} *wordpress.tar.gz" | sha1sum -c - \
+#RUN curl -o wordpress.sha1 -SL https://wordpress.org/wordpress-${WORDPRESS_VERSION}.tar.gz.sha1 \
+#     && curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VERSION}.tar.gz \
+#     && echo "`cat wordpress.sha1` *wordpress.tar.gz" | sha1sum -c - \
 #    && tar -xzf wordpress.tar.gz -C /var/www/html \
 #    && rm wordpress.tar.gz
 
@@ -97,12 +109,6 @@ RUN chown -R www-data:www-data /var/www/html/content/uploads
 #    && touch /var/www/html/wordpress/db-config.php \
 #    && ln -s /var/www/html/wordpress/db-config.php /var/www/html/.
 
-# install wp-cli, http://wp-cli.org
-ENV WP_CLI_CONFIG_PATH /var/www/html/wp-cli.yml
-RUN curl -Ls -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
-    && chmod +x wp-cli.phar \
-    && mv wp-cli.phar /usr/local/bin/wp \
-    && wp --info --allow-root
 
 # install ztollman's object-cache.php and batcache's advanced-cache.php for memcached caching
 # question. does this belong here in the Dockerfile or in /content in our repo?

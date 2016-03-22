@@ -72,7 +72,7 @@ def on_start():
     # what to do when no password is set in _env?
     WORDPRESS_ADMIN_PASSWORD = os.environ.get("WORDPRESS_ADMIN_PASSWORD", "")
     WORDPRESS_TEST_DATA = os.environ.get("WORDPRESS_TEST_DATA", False)
-
+'''
     if WORDPRESS_VERSION in versions.keys():
         log.info("valid wordpress version requested")
     else:
@@ -116,6 +116,7 @@ def on_start():
         subprocess.call("wp --allow-root import wptest.xml --authors=create".split())
         subprocess.call("wp --allow-root plugin uninstall wordpress-importer --deactivate".split())
         os.remove("wptest.xml")
+'''
 
 def health():
     pass

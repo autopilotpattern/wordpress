@@ -3,7 +3,8 @@ wordpress:
   env_file: _env
   environment:
     - CONTAINERBUDDY=file:///opt/containerbuddy/config.json
-    - WORDPRESS_VERSION="4.4.2"
+    - WORDPRESS_VERSION=4.4.2
+    - ENV_TEST=test
 
 # MySQL designed for container-native deployment on Joyent's Triton platform.
 

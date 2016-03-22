@@ -82,6 +82,8 @@ RUN curl -Ls -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp
     && mv wp-cli.phar /usr/local/bin/wp \
     && wp --info --allow-root
 
+ENV WORDPRESS_VERSION=${WORDPRESS_VERSION:-4.4.2}
+
 # install WordPress via wp-cli
 RUN wp --allow-root core download --version=${WORDPRESS_VERSION}
 
@@ -121,7 +123,7 @@ RUN chown -R www-data:www-data /var/www/html/tools
 RUN ln -sf /proc/self/fd/1 /var/log/apache2/error.log
 
 # the volume is defined after we install everything
-VOLUME /var/www/html
+#VOLUME /var/www/html
 
 # grr, ENTRYPOINT resets CMD now
 #ENTRYPOINT ["/entrypoint.py"]

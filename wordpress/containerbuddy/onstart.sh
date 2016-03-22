@@ -56,4 +56,7 @@ else
   fi
 fi
 
+# copy themes from wp install directory to content/themes
+cp -r /var/www/html/wordpress/wp-content/themes/* /var/www/html/content/themes/
+
 #exec "$@"

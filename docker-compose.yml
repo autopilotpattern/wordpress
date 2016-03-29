@@ -1,5 +1,3 @@
-
-
 wordpress:
   restart: always
   extends:
@@ -28,7 +26,7 @@ memcached:
   links:
     - consul:consul
   restart: always
-  
+
 # Nginx as a load-balancing tier and reverse proxy
 nginx:
   extends:

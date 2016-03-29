@@ -15,7 +15,7 @@ mysql:
       - MANTA_PRIVATE_KEY
 
 memcached:
-  build: memcached/
+  image: autopilot-memcached
   mem_limit: 512m
   environment:
     - CONTAINERBUDDY=file:///opt/containerbuddy/config.json

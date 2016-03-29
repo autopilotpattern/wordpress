@@ -1,6 +1,9 @@
 {
   "consul": "consul:8500",
-  "onStart": [],
+  "onStart": [
+    "consul-template", "-retry", "5s", "-consul", "consul:8500", "-template",
+    "/etc/containerbuddy/nginx.conf.ctmpl:/etc/nginx/nginx.conf"
+  ],
   "services": [
     {
       "name": "nginx",

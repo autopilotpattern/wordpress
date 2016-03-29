@@ -73,8 +73,9 @@ COPY /var/www/html /var/www/html
 
 
 ENV WORDPRESS_VERSION=${WORDPRESS_VERSION:-4.4.2}
-# install WordPress via wp-cli
-RUN wp --allow-root core download --version=${WORDPRESS_VERSION}
+# install WordPress via wp-cli & copy the default themes to our content dir
+RUN wp --allow-root core download --version=${WORDPRESS_VERSION} \
+    && cp -r /var/www/html/wordpress/wp-content/themes/* /var/www/html/content/themes/
 
 
 # install HyperDB, https://wordpress.org/plugins/hyperdb

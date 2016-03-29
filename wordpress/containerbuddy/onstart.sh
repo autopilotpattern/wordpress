@@ -9,7 +9,7 @@
 # if their backends' onChange handlers are triggered simultaneously
 echo "******running onstart script*********"
 
-until [[ `curl -s consul:8500/v1/health/state/passing | grep mysql-primary` ]]
+until [[ `curl -s ${CONSUL}/v1/health/service/mysql-primary?passing` ]]
 do
   echo "mysql-primary not healthly...."
   sleep 5
@@ -57,6 +57,7 @@ else
 fi
 
 # copy themes from wp install directory to content/themes
-cp -r /var/www/html/wordpress/wp-content/themes/* /var/www/html/content/themes/
+# TODO remove this and use wp-cli to set the active theme to our theme from the repo
+#cp -r /var/www/html/wordpress/wp-content/themes/* /var/www/html/content/themes/
 
 #exec "$@"

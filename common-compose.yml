@@ -23,13 +23,15 @@ memcached:
   ports:
     - 11211
 
-# Nginx as a load-balancing tier and reverse proxy
 nginx:
-    build: nginx/
-    mem_limit: 128m
+    image: 0x74696d/triton-nginx
+    mem_limit: 512m
+    ports:
+    - 80
+    environment:
+      - NGINX_CONF
     command: >
-      /bin/containerbuddy
-      -config file:///etc/containerbuddy/containerbuddy.json
+      /opt/containerbuddy/containerbuddy -config file:///etc/containerbuddy.json
       nginx -g "daemon off;"
 
 # ---------------------------------------------------

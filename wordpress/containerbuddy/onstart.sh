@@ -22,14 +22,14 @@ done
 consul-template \
     -once \
     -dedup \
-    -consul consul:8500 \
+    -consul ${CONSUL} \
     -template "/var/www/html/wp-config.php.ctmpl:/var/www/html/wp-config.php"
 
 # The WP-CLI config
 #consul-template \
 #    -once \
 #    -dedup \
-#    -consul consul:8500 \
+#    -consul ${CONSUL} \
 #    -template "/var/www/html/wp-cli.yml.ctmpl:/var/www/html/wp-cli.yml"
 
 if $(wp --allow-root core is-installed)

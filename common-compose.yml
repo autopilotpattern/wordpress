@@ -17,6 +17,7 @@ mysql:
 memcached:
   image: autopilot-memcached
   mem_limit: 512m
+  env_file: _env
   environment:
     - CONTAINERBUDDY=file:///opt/containerbuddy/config.json
   ports:

@@ -27,7 +27,7 @@ memcached:
     service: memcached
   links:
     - consul:consul
-  restart: always
+  restart: never
 
 # Nginx as a load-balancing tier and reverse proxy
 nginx:

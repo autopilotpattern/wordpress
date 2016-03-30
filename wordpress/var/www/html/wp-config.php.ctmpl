@@ -16,7 +16,7 @@
 define( 'DB_NAME',     '{{env "MYSQL_DATABASE"}}' );
 define( 'DB_USER',     '{{env "MYSQL_USER"}}' );
 define( 'DB_PASSWORD', '{{env "MYSQL_PASSWORD"}}' );
-define( 'DB_HOST',     '{{range service "mysql-primary"}}{{.Address}}:{{.Port}}{{end}}' );
+define( 'DB_HOST',     '{{if service "mysql-primary"}}{{with index (service "mysql-primary") 0}}{{.Address}}:{{.Port}}{{end}}{{end}}' );
 
 /**
  * Custom Content Directory

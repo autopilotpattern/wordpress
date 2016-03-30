@@ -9,11 +9,15 @@
 # if their backends' onChange handlers are triggered simultaneously
 echo "******running onstart script*********"
 
-until [[ `curl -s ${CONSUL}/v1/health/service/mysql-primary?passing` ]]
+echo "wait for consul api not to return[]"
+echo $(curl -s ${CONSUL}:8500/v1/health/service/mysql-primary?passing)
+until [[ `curl -s ${CONSUL}:8500/v1/health/state/passing | grep mysql-primary`  ]]
 do
   echo "mysql-primary not healthly...."
   sleep 5
 done
+
+echo "mysql-primary is now health, moving on..."
 
 /opt/containerbuddy/reload-db.sh
 /opt/containerbuddy/memcached.sh
@@ -22,7 +26,7 @@ done
 consul-template \
     -once \
     -dedup \
-    -consul ${CONSUL} \
+    -consul ${CONSUL}:8500 \
     -template "/var/www/html/wp-config.php.ctmpl:/var/www/html/wp-config.php"
 
 # The WP-CLI config
@@ -56,8 +60,6 @@ else
   fi
 fi
 
-# copy themes from wp install directory to content/themes
-# TODO remove this and use wp-cli to set the active theme to our theme from the repo
-#cp -r /var/www/html/wordpress/wp-content/themes/* /var/www/html/content/themes/
+
 
 #exec "$@"

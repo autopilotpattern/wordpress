@@ -1,9 +1,9 @@
 {
-  "consul": "{{.CONSUL}}",
+  "consul": "{{.CONSUL}}:8500",
   "onStart": "/opt/containerbuddy/onstart.sh",
   "services": [
     {
-      "name": "wordpress",
+      "name": "app",
       "port": 80,
       "publicIp": true,
       "health": "/opt/containerbuddy/health.sh",
@@ -15,7 +15,7 @@
     {
       "name": "mysql",
       "poll": 5,
-      "onChange": "/opt/containerbuddy/wp-config.sh"
+      "onChange": "/opt/containerbuddy/reload-db.sh"
     },
     {
       "name": "memcached",

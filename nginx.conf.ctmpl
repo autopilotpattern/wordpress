@@ -23,10 +23,10 @@ http {
     keepalive_timeout  65;
 
 
-    {{ if service "wordpress" }}
+    {{ if service "app" }}
     upstream wordpress {
         # write the address:port pairs for each healthy Customers node
-        {{range service "wordpress"}}
+        {{range service "app"}}
         server {{.Address}}:{{.Port}};
         {{end}}
         least_conn;
@@ -39,14 +39,12 @@ http {
 
         root /usr/share/nginx/html;
 
-        location /health {
-            # requires http_stub_status_module
-            stub_status;
-            allow 127.0.0.1;
-            deny all;
+        location /health.txt {
+            add_header content-type "text/html";
+            alias /usr/share/nginx/html/index.html;
         }
 
-        {{ if service "wordpress" }}
+        {{ if service "app" }}
         location ^~ / {
             proxy_pass http://wordpress;
             proxy_redirect off;

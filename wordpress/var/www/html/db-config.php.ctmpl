@@ -25,7 +25,8 @@
  *
  * This has reads turned off, though any reads following a write _will_ be against the master.
  */
-{{with index (service "dbmaster") 0}}
+{{if service "mysql-primary"}}
+{{with index (service "mysql-primary") 0}}
 $wpdb->add_database(array(
 	'host'     => '{{.Address}}:{{.Port}}',
 	'user'     => DB_USER,
@@ -35,14 +36,15 @@ $wpdb->add_database(array(
 	'read'     => 0,
 	'dataset'  => 'global',
 ));{{end}}
+{{end}}
 
-{{if service "dbreplica"}}
+{{if service "mysql"}}
 /**
  * The DB replicas
  *
  * These are read-only.
  */
-{{range service "dbreplica"}}
+{{range service "mysql"}}
 $wpdb->add_database(array(
 	'host'     => '{{.Address}}:{{.Port}}',
 	'user'     => DB_USER,
@@ -57,7 +59,7 @@ $wpdb->add_database(array(
 /**
  * No DB replicas are healthy, so we're adding the master in as a read-host.
  */
-{{range service "dbmaster"}}
+{{range service "mysql-primary"}}
 $wpdb->add_database(array(
 	'host'     => '{{.Address}}:{{.Port}}',
 	'user'     => DB_USER,

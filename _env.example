@@ -23,4 +23,17 @@ WORDPRESS_ADMIN_PASSWORD=password
 WORDPRESS_ACTIVE_THEME=theme
 #WORDPRESS_TEST_DATA=False
 
+# Wordpress unique stalts - these must be unique for your install to ensure
+# login security. visit the following link to generate a set for your site and
+# include them here
+# https://api.wordpress.org/secret-key/1.1/salt/
+WORDPRESS_AUTH_KEY=
+WORDPRESS_SECURE_AUTH_KEY=
+WORDPRESS_LOGGED_IN_KEY=
+WORDPRESS_NONCE_KEY=
+WORDPRESS_AUTH_SALT=
+WORDPRESS_SECURE_AUTH_SALT=
+WORDPRESS_LOGGED_IN_SALT=
+WORDPRESS_NONCE_SALT=
+
 CONSUL=consul

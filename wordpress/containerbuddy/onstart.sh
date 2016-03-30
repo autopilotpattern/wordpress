@@ -9,8 +9,6 @@
 # if their backends' onChange handlers are triggered simultaneously
 echo "******running onstart script*********"
 
-echo "wait for consul api not to return[]"
-echo $(curl -s ${CONSUL}:8500/v1/health/service/mysql-primary?passing)
 until [[ `curl -s ${CONSUL}:8500/v1/health/state/passing | grep mysql-primary`  ]]
 do
   echo "mysql-primary not healthly...."

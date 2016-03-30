@@ -18,8 +18,8 @@ mysql:
     restart: never
     links:
       - consul:consul
-    expose:
-      - 3306
+    ports:
+      - "3306"
 
 memcached:
   extends:

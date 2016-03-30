@@ -80,14 +80,14 @@ RUN wp --allow-root core download --version=${WORDPRESS_VERSION} \
 
 # install HyperDB, https://wordpress.org/plugins/hyperdb
 # Releases at https://wordpress.org/plugins/hyperdb/developers/ , though no SHA1 fingerprints are published
-#ENV HYPERDB_VERSION 1.1
-#RUN curl -Ls -o /var/www/html/hyperdb.zip https://downloads.wordpress.org/plugin/hyperdb.${HYPERDB_VERSION}.zip \
-#    && unzip hyperdb.zip \
-#    && chown -R www-data:www-data /var/www/html/hyperdb \
-#    && mv hyperdb/db.php /var/www/html/content/. \
-#    && rm -rf /var/www/html/hyperdb.zip /var/www/html/hyperdb \
-#    && touch /var/www/html/wordpress/db-config.php \
-#    && ln -s /var/www/html/wordpress/db-config.php /var/www/html/.
+ENV HYPERDB_VERSION 1.1
+RUN curl -Ls -o /var/www/html/hyperdb.zip https://downloads.wordpress.org/plugin/hyperdb.${HYPERDB_VERSION}.zip \
+    && unzip hyperdb.zip \
+    && chown -R www-data:www-data /var/www/html/hyperdb \
+    && mv hyperdb/db.php /var/www/html/content/. \
+    && rm -rf /var/www/html/hyperdb.zip /var/www/html/hyperdb \
+    && touch /var/www/html/content/db-config.php
+#    && ln -s /var/www/html/content/db-config.php /var/www/html/.
 
 
 # install ztollman's object-cache.php or object caching to memcached

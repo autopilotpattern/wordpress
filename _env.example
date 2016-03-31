@@ -15,7 +15,8 @@ MANTA_PRIVATE_KEY=
 MANTA_BUCKET=
 
 WORDPRESS_VERSION=4.1
-WORDPRESS_URL=localhost
+# please include the scheme http:// or https:// in the URL variable
+WORDPRESS_URL=http://localhost
 WORDPRESS_SITE_TITLE=test site
 WORDPRESS_ADMIN_EMAIL=username@domain.com
 WORDPRESS_ADMIN_USER=username
@@ -23,7 +24,7 @@ WORDPRESS_ADMIN_PASSWORD=password
 WORDPRESS_ACTIVE_THEME=theme
 #WORDPRESS_TEST_DATA=False
 
-# Wordpress unique stalts - these must be unique for your install to ensure
+# Wordpress unique salts - these must be unique for your install to ensure
 # login security. visit the following link to generate a set for your site and
 # include them here
 # https://api.wordpress.org/secret-key/1.1/salt/

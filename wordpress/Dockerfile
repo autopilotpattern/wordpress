@@ -87,8 +87,6 @@ RUN curl -Ls -o /var/www/html/hyperdb.zip https://downloads.wordpress.org/plugin
     && mv hyperdb/db.php /var/www/html/content/. \
     && rm -rf /var/www/html/hyperdb.zip /var/www/html/hyperdb \
     && touch /var/www/html/content/db-config.php
-#    && ln -s /var/www/html/content/db-config.php /var/www/html/.
-
 
 # install ztollman's object-cache.php or object caching to memcached
 RUN curl -Ls -o /var/www/html/content/object-cache.php https://raw.githubusercontent.com/tollmanz/wordpress-pecl-memcached-object-cache/master/object-cache.php

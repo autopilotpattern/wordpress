@@ -17,22 +17,15 @@ done
 
 echo "mysql-primary is now health, moving on..."
 
-/opt/containerbuddy/reload-db.sh
-/opt/containerbuddy/memcached.sh
+/opt/containerbuddy/onchange_reload-db.sh
+/opt/containerbuddy/onchange_reload-memcached.sh
 
 # The WordPress config file
 consul-template \
     -once \
     -dedup \
     -consul ${CONSUL}:8500 \
-    -template "/var/www/html/wp-config.php.ctmpl:/var/www/html/wp-config.php"
-
-# The WP-CLI config
-#consul-template \
-#    -once \
-#    -dedup \
-#    -consul ${CONSUL} \
-#    -template "/var/www/html/wp-cli.yml.ctmpl:/var/www/html/wp-cli.yml"
+    -template "/var/www/html/consul-templates/wp-config.php.ctmpl:/var/www/html/wp-config.php"
 
 if $(wp --allow-root core is-installed)
 then

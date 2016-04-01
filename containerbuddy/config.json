@@ -3,7 +3,7 @@
   "onStart": "/opt/containerbuddy/onstart.sh",
   "services": [
     {
-      "name": "app",
+      "name": "wordpress",
       "port": 80,
       "publicIp": true,
       "health": "/opt/containerbuddy/health.sh",
@@ -15,12 +15,12 @@
     {
       "name": "mysql",
       "poll": 5,
-      "onChange": "/opt/containerbuddy/reload-db.sh"
+      "onChange": "/opt/containerbuddy/onchange_reload-db.sh"
     },
     {
       "name": "memcached",
       "poll": 5,
-      "onChange": "/opt/containerbuddy/memcached.sh"
+      "onChange": "/opt/containerbuddy/onchange_reload-memcached.sh"
     }
   ]
 }

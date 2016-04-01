@@ -23,10 +23,10 @@ http {
     keepalive_timeout  65;
 
 
-    {{ if service "app" }}
+    {{ if service "wordpress" }}
     upstream wordpress {
         # write the address:port pairs for each healthy Customers node
-        {{range service "app"}}
+        {{range service "wordpress"}}
         server {{.Address}}:{{.Port}};
         {{end}}
         least_conn;
@@ -44,7 +44,7 @@ http {
             alias /usr/share/nginx/html/index.html;
         }
 
-        {{ if service "app" }}
+        {{ if service "wordpress" }}
         location ^~ / {
             proxy_pass http://wordpress;
             proxy_redirect off;

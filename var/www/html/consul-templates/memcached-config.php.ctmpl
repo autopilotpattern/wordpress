@@ -8,14 +8,6 @@
  * Last update {{timestamp}}
  */
 
-#return array(
-#{{range service "memcached"}}
-#	'{{.Address}}:{{.Port}}',
-#{{end}}
-#);
-
-
-
 {{ if service "memcached" }}
 global $memcached_servers;
 

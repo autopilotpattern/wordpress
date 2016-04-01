@@ -91,7 +91,8 @@ RUN curl -Ls -o /var/www/html/hyperdb.zip https://downloads.wordpress.org/plugin
 # install ztollman's object-cache.php or object caching to memcached
 RUN curl -Ls -o /var/www/html/content/object-cache.php https://raw.githubusercontent.com/tollmanz/wordpress-pecl-memcached-object-cache/master/object-cache.php
 
-RUN chown -R www-data:www-data /var/www/html/tools
+# the volume is defined after we install everything
+VOLUME /var/www/html
 
 CMD ["/opt/containerbuddy/containerbuddy", \
     "apache2-foreground"]

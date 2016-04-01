@@ -1,5 +1,5 @@
 wordpress:
-  build: wordpress/
+  build: .
   env_file: _env
   environment:
     - CONTAINERBUDDY=file:///opt/containerbuddy/config.json
@@ -28,10 +28,11 @@ nginx:
     mem_limit: 512m
     ports:
     - 80
+    env_file: _env
     environment:
       - NGINX_CONF
     command: >
-      /opt/containerbuddy/containerbuddy -config file:///etc/containerbuddy.json
+      /opt/containerbuddy/containerbuddy -config '{"consul":"{{.CONSUL}}:8500","onStart":"/opt/containerbuddy/reload.sh preStart","services":[{"name":"nginx","port": 80,"publicIp": true,"health":"/usr/bin/curl --fail -s http://localhost/health.txt","poll":10,"ttl":25}],"backends":[{"name":"wordpress","poll":5,"onChange":"/opt/containerbuddy/reload.sh"}]}'
       nginx -g "daemon off;"
 
 # ---------------------------------------------------

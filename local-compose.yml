@@ -6,7 +6,6 @@ wordpress:
     - consul:consul
   mem_limit: 512m
   restart: never
-  build: wordpress/
   ports:
     - "80"
 

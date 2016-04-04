@@ -4,11 +4,25 @@ wordpress:
     service: wordpress
   links:
     - consul:consul
+    - nfs:nfs
   mem_limit: 512m
   restart: never
   ports:
     - "80"
 
+nfs:
+    extends:
+      file: common-compose.yml
+      service: nfs
+    environment:
+      - CONSUL=consul
+      - CONTAINERBUDDY=file:///etc/containerbuddy.json
+    links:
+      - consul:consul
+    ports:
+      - "111"
+      - "1892:1892"
+      - "2049"
 
 mysql:
     extends:

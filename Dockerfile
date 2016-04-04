@@ -18,6 +18,11 @@ RUN apt-get update && apt-get install -y libmemcached-dev \
     && pecl install memcached \
     && docker-php-ext-enable memcached
 
+# install nfs support for WordPress uploads directory
+# using --no-install-recommends to prevent python install
+RUN apt-get install -y --no-install-recommends \
+    nfs-common
+
 # set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
 RUN { \

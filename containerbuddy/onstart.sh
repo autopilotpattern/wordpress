@@ -15,7 +15,13 @@ do
   sleep 5
 done
 
-echo "mysql-primary is now health, moving on..."
+until [[ `curl -s ${CONSUL}:8500/v1/health/state/passing | grep nfs`  ]]
+do
+  echo "no healthly nfs server avaliable yet...."
+  sleep 5
+done
+
+echo "mysql-primary and nfs are now healthly, moving on..."
 
 /opt/containerbuddy/onchange_reload-db.sh
 /opt/containerbuddy/onchange_reload-memcached.sh

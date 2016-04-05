@@ -1,6 +1,6 @@
 {
   "consul": "{{ .CONSUL }}:8500",
-  "preStart": "/usr/local/bin/onstart.sh",
+  "preStart": "/usr/local/bin/prestart.sh",
   "services": [
     {
       "name": "wordpress",

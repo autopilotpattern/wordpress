@@ -7,7 +7,7 @@
 
 # The database and memcached config files are separate to avoid collisions
 # if their backends' onChange handlers are triggered simultaneously
-echo "******running onstart script*********"
+echo "******running preStart script*********"
 
 until [[ `curl -s ${CONSUL}:8500/v1/health/state/passing | grep mysql-primary`  ]]
 do
@@ -23,8 +23,8 @@ done
 
 echo "mysql-primary and nfs are now healthly, moving on..."
 
-/usr/local/bin/onchange_reload-db.sh
-/usr/local/bin/onchange_reload-memcached.sh
+/usr/local/bin/onchange-db.sh
+/usr/local/bin/onchange-memcached.sh
 
 # The WordPress config file
 consul-template \

@@ -39,13 +39,13 @@ RUN apt-get update \
     && apt-get install -y \
     curl
 
-# The our helper/glue scripts for this specific app
+# The our helper/glue scripts and configuration for this specific app
 COPY bin /usr/local/bin
+COPY etc /etc
 
 # Add Containerbuddy and its configuration
 ENV CONTAINERBUDDY_VER 1.3.0
 ENV CONTAINERBUDDY file:///etc/containerbuddy.json
-COPY containerbuddy.json /etc
 
 RUN export CONTAINERBUDDY_CHECKSUM=c25d3af30a822f7178b671007dcd013998d9fae1 \
     && curl -Lso /tmp/containerbuddy.tar.gz \

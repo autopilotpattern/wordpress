@@ -9,6 +9,11 @@
  */
 
 {{ if service "memcached" }}
+# turn on WP caching
+define('WP_CACHE', true);
+define( 'WP_APC_KEY_SALT', '{{env "WORDPRESS_CACHE_KEY_SALT"}}' );
+define( 'WP_CACHE_KEY_SALT', '{{env "WORDPRESS_CACHE_KEY_SALT"}}' );
+
 global $memcached_servers;
 
 # write the address:port pairs for each healthy memcached node

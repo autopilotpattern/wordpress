@@ -4,24 +4,20 @@ RUN a2enmod rewrite
 
 # install the PHP extensions we need, and other packages
 RUN apt-get update \
-    && apt-get install -y \
+    && apt-get install -y --no-install-recommends \
         less \
         libpng12-dev \
         libjpeg-dev \
         unzip \
+        curl \
+        nfs-common \
+        libmemcached-dev \
+        vim \
     && rm -rf /var/lib/apt/lists/* \
-    && docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
-    && docker-php-ext-install gd mysqli opcache
-
-# install libmemcache and the php lib
-RUN apt-get update && apt-get install -y libmemcached-dev \
     && pecl install memcached \
+    && docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
+    && docker-php-ext-install gd mysqli opcache \
     && docker-php-ext-enable memcached
-
-# install nfs support for WordPress uploads directory
-# using --no-install-recommends to prevent python install
-RUN apt-get install -y --no-install-recommends \
-    nfs-common
 
 # set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
@@ -34,10 +30,6 @@ RUN { \
         echo 'opcache.enable_cli=1'; \
     } > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
-# install python for entrypoint
-RUN apt-get update \
-    && apt-get install -y \
-    curl
 
 # The our helper/glue scripts and configuration for this specific app
 COPY bin /usr/local/bin
@@ -51,7 +43,7 @@ RUN export CONTAINERBUDDY_CHECKSUM=c25d3af30a822f7178b671007dcd013998d9fae1 \
     && curl -Lso /tmp/containerbuddy.tar.gz \
          "https://github.com/joyent/containerbuddy/releases/download/${CONTAINERBUDDY_VER}/containerbuddy-${CONTAINERBUDDY_VER}.tar.gz" \
     && echo "${CONTAINERBUDDY_CHECKSUM}  /tmp/containerbuddy.tar.gz" | sha1sum -c \
-    && tar zxf /tmp/containerbuddy.tar.gz -C /bin \
+    && tar zxf /tmp/containerbuddy.tar.gz -C /usr/local/bin \
     && rm /tmp/containerbuddy.tar.gz
 
 # Install Consul template
@@ -78,7 +70,7 @@ RUN curl -Ls -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp
 COPY /var/www/html /var/www/html
 
 
-ENV WORDPRESS_VERSION=${WORDPRESS_VERSION:-4.4.2}
+ENV WORDPRESS_VERSION 4.4.2
 # install WordPress via wp-cli & copy the default themes to our content dir
 RUN wp --allow-root core download --version=${WORDPRESS_VERSION} \
     && cp -r /var/www/html/wordpress/wp-content/themes/* /var/www/html/content/themes/
@@ -96,6 +88,7 @@ RUN curl -Ls -o /var/www/html/hyperdb.zip https://downloads.wordpress.org/plugin
 
 # install ztollman's object-cache.php or object caching to memcached
 RUN curl -Ls -o /var/www/html/content/object-cache.php https://raw.githubusercontent.com/tollmanz/wordpress-pecl-memcached-object-cache/master/object-cache.php
+
 
 # the volume is defined after we install everything
 VOLUME /var/www/html

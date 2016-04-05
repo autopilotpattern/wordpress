@@ -5,7 +5,16 @@
     {
       "name": "wordpress",
       "port": 80,
-      "publicIp": true,
+      "interfaces": [
+        "eth0",
+        "eth1[1]",
+        "192.168.0.0/16",
+        "2001:db8::/64",
+        "eth2:inet",
+        "eth2:inet6",
+        "inet",
+        "inet6"
+      ],
       "health": "/usr/local/bin/health.sh",
       "poll": 10,
       "ttl": 25

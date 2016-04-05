@@ -1,6 +1,6 @@
 #!/bin/bash
 
-/usr/local/bin/wp-config.sh
+/usr/local/bin/onchange-wp-config.sh
 
 consul-template \
     -once \

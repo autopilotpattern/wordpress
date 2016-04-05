@@ -25,13 +25,10 @@ echo "mysql-primary and nfs are now healthly, moving on..."
 
 /usr/local/bin/onchange-db.sh
 /usr/local/bin/onchange-memcached.sh
+/usr/local/bin/onchange-nfs.sh
 
 # The WordPress config file
-consul-template \
-    -once \
-    -dedup \
-    -consul ${CONSUL}:8500 \
-    -template "/var/www/html/consul-templates/wp-config.php.ctmpl:/var/www/html/wp-config.php"
+/usr/local/bin/onchange-wp-config.sh
 
 if $(wp --allow-root core is-installed)
 then
@@ -41,6 +38,7 @@ then
 else
   echo "WP is NOT installed"
   echo "installing now...."
+  # TODO: check WORDPRESS_URL to ensure it has http:// or https:// at the beginning, if not put it in
   wp --allow-root core install --url=$WORDPRESS_URL --title="$WORDPRESS_SITE_TITLE" --admin_user=$WORDPRESS_ADMIN_USER --admin_password=$WORDPRESS_ADMIN_PASSWORD --admin_email=$WORDPRESS_ADMIN_EMAIL --skip-email
   # update siteurl to work with our directory structure
   # wp option update for siteurl REQUIRES http://, need to determine will we handle that here

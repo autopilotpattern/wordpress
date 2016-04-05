@@ -73,13 +73,10 @@ define( 'WP_DEBUG_DISPLAY', {{key_or_default "wordpress/config/WP_DEBUG_DISPLAY"
  * Debugging? Enable these.
  */
 
-# turn on WP caching
-# TODO: template this with consul template to remove if no memcached servers are avaliable?
-# maybe just add it to the memcached-config.php file
-define('WP_CACHE', true);
-define( 'WP_APC_KEY_SALT', 'triton-001' );
-define( 'WP_CACHE_KEY_SALT', 'triton-001' );
-
+# check if NFS mount is writable, if not change upload dir to local
+#if (!wp_is_writable("/var/www/html/content/uploads/")){
+#    define('UPLOADS', '/var/www/html/content/local_uploads/');
+#}
 
 /**
  * Load the Memcached config

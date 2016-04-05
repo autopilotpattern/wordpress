@@ -6,6 +6,7 @@ wordpress:
   mem_limit: 1g
   links:
     - consul:consul
+    - nfs:nfs
   ports:
     - 80
 

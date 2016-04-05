@@ -22,6 +22,7 @@ WORDPRESS_ADMIN_EMAIL=username@domain.com
 WORDPRESS_ADMIN_USER=username
 WORDPRESS_ADMIN_PASSWORD=password
 WORDPRESS_ACTIVE_THEME=theme
+WORDPRESS_CACHE_KEY_SALT=some-unique-string
 #WORDPRESS_TEST_DATA=False
 
 # Wordpress unique salts - these must be unique for your install to ensure

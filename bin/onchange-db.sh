@@ -1,6 +1,6 @@
 #!/bin/bash
 
-/opt/containerbuddy/wp-config.sh
+/usr/local/bin/wp-config.sh
 
 consul-template \
     -once \

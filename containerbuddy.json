@@ -1,0 +1,31 @@
+{
+  "consul": "{{ .CONSUL }}:8500",
+  "preStart": "/usr/local/bin/onstart.sh",
+  "services": [
+    {
+      "name": "wordpress",
+      "port": 80,
+      "publicIp": true,
+      "health": "/usr/local/bin/health.sh",
+      "poll": 10,
+      "ttl": 25
+    }
+  ],
+  "backends": [
+    {
+      "name": "mysql",
+      "poll": 7,
+      "onChange": "/usr/local/bin/onchange-db.sh"
+    },
+    {
+      "name": "nfs",
+      "poll": 11,
+      "onChange": "/usr/local/bin/onchange-nfs.sh"
+    },
+    {
+      "name": "memcached",
+      "poll": 5,
+      "onChange": "/usr/local/bin/onchange-memcached.sh"
+    }
+  ]
+}

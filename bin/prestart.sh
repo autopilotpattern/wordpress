@@ -23,8 +23,8 @@ done
 
 echo "mysql-primary and nfs are now healthly, moving on..."
 
-/opt/containerbuddy/onchange_reload-db.sh
-/opt/containerbuddy/onchange_reload-memcached.sh
+/usr/local/bin/onchange_reload-db.sh
+/usr/local/bin/onchange_reload-memcached.sh
 
 # The WordPress config file
 consul-template \
@@ -56,7 +56,3 @@ else
     rm wptest.xml
   fi
 fi
-
-
-
-#exec "$@"

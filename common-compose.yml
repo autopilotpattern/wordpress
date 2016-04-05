@@ -2,8 +2,6 @@ wordpress:
   build: .
   privileged: true
   env_file: _env
-  environment:
-    - CONTAINERBUDDY=file:///opt/containerbuddy/config.json
 
 nfs:
     image: autopilot-nfs

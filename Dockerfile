@@ -39,19 +39,20 @@ RUN apt-get update \
     && apt-get install -y \
     curl
 
-# The Containerbuddy helper/glue scripts for this specific app
-COPY containerbuddy /opt/containerbuddy
+# The our helper/glue scripts for this specific app
+COPY bin /usr/local/bin
 
-# Install Containerbuddy
-# Releases at https://github.com/joyent/containerbuddy/releases
-ENV CONTAINERBUDDY_VERSION 0.1.1
-ENV CONTAINERBUDDY_SHA1 3163e89d4c95b464b174ba31733946ca247e068e
-RUN curl --retry 7 -Lso /tmp/containerbuddy.tar.gz "https://github.com/joyent/containerbuddy/releases/download/${CONTAINERBUDDY_VERSION}/containerbuddy-${CONTAINERBUDDY_VERSION}.tar.gz" \
-    && echo "${CONTAINERBUDDY_SHA1}  /tmp/containerbuddy.tar.gz" | sha1sum -c \
-    && tar zxf /tmp/containerbuddy.tar.gz -C /opt/containerbuddy \
+# Add Containerbuddy and its configuration
+ENV CONTAINERBUDDY_VER 1.3.0
+ENV CONTAINERBUDDY file:///etc/containerbuddy.json
+COPY containerbuddy.json /etc
+
+RUN export CONTAINERBUDDY_CHECKSUM=c25d3af30a822f7178b671007dcd013998d9fae1 \
+    && curl -Lso /tmp/containerbuddy.tar.gz \
+         "https://github.com/joyent/containerbuddy/releases/download/${CONTAINERBUDDY_VER}/containerbuddy-${CONTAINERBUDDY_VER}.tar.gz" \
+    && echo "${CONTAINERBUDDY_CHECKSUM}  /tmp/containerbuddy.tar.gz" | sha1sum -c \
+    && tar zxf /tmp/containerbuddy.tar.gz -C /bin \
     && rm /tmp/containerbuddy.tar.gz
-
-COPY containerbuddy/* /opt/containerbuddy/
 
 # Install Consul template
 # Releases at https://releases.hashicorp.com/consul-template/
@@ -99,5 +100,5 @@ RUN curl -Ls -o /var/www/html/content/object-cache.php https://raw.githubusercon
 # the volume is defined after we install everything
 VOLUME /var/www/html
 
-CMD ["/opt/containerbuddy/containerbuddy", \
+CMD ["/usr/local/bin/containerbuddy", \
     "apache2-foreground"]

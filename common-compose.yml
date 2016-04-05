@@ -1,8 +1,23 @@
 wordpress:
   build: .
+  privileged: true
   env_file: _env
   environment:
     - CONTAINERBUDDY=file:///opt/containerbuddy/config.json
+
+nfs:
+    image: autopilot-nfs
+    privileged: true
+    mem_limit: 256m
+    restart: always
+    labels:
+      - triton.cns.services=nfs
+    expose:
+      - 111
+      - 1892
+      - 2049
+    environment:
+      - CONSUL=consul
 
 # MySQL designed for container-native deployment on Joyent's Triton platform.
 

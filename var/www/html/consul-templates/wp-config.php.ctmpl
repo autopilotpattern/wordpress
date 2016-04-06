@@ -73,11 +73,6 @@ define( 'WP_DEBUG_DISPLAY', {{key_or_default "wordpress/config/WP_DEBUG_DISPLAY"
  * Debugging? Enable these.
  */
 
-# check if NFS mount is writable, if not change upload dir to local
-#if (!wp_is_writable("/var/www/html/content/uploads/")){
-#    define('UPLOADS', '/var/www/html/content/local_uploads/');
-#}
-
 /**
  * Load the Memcached config
  */

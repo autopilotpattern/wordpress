@@ -20,14 +20,19 @@ else
   umount -f -l /var/www/html/content/uploads
   echo "creating mu-plugin for NFS error in wp-admin"
   echo "<?php
-  function nfs_error_notice() {
-      ?>
-      <div class="error notice">
-          <p><?php _e('The NFS container is not present, media uploads have been disabled'); ?></p>
-      </div>
-      <?php
-  }
-  add_action( 'admin_notices', 'nfs_error_notice' );" > /var/www/html/content/mu-plugins/no-uploads.php
+/**
+ * Display an error when the NFS container is unavailable.
+ */
+function nfs_error_notice() {
+?>
+
+    <div class="error notice">
+        <p><?php esc_html_e( 'The NFS container is not present, media uploads have been disabled'); ?></p>
+    </div>
+
+<?php
+}
+add_action( 'admin_notices', 'nfs_error_notice' );" > /var/www/html/content/mu-plugins/no-uploads.php
 
   echo "removing 'upload_files' capability from all roles..."
   for role in $(wp --allow-root role list --fields=role --format=csv)

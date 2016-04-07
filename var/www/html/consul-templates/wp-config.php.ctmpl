@@ -12,16 +12,17 @@
  * The following database info is needed here, but is ignored after we load HyperDB.
  * See db-config.php.ctmpl for details.
  */
-define( 'DB_NAME',     '{{key "wordpress/config/DB_NAME"}}' );
-define( 'DB_USER',     '{{key "wordpress/config/DB_USER"}}' );
-define( 'DB_PASSWORD', '{{key "wordpress/config/DB_PASSWORD"}}' );
-define( 'DB_HOST',     '{{with index (service "dbmaster") 0}}{{.Address}}:{{.Port}}{{end}}' );
+ ## this is a test
+define( 'DB_NAME',     '{{env "MYSQL_DATABASE"}}' );
+define( 'DB_USER',     '{{env "MYSQL_USER"}}' );
+define( 'DB_PASSWORD', '{{env "MYSQL_PASSWORD"}}' );
+define( 'DB_HOST',     '{{if service "mysql-primary"}}{{with index (service "mysql-primary") 0}}{{.Address}}:{{.Port}}{{end}}{{end}}' );
 
 /**
  * Custom Content Directory
  */
 define( 'WP_CONTENT_DIR', dirname( __FILE__ ) . '/content' );
-define( 'WP_CONTENT_URL', '{{key "wordpress/config/site_url"}}/content' );
+define( 'WP_CONTENT_URL', '{{env "WORDPRESS_URL"}}/content' );
 
 /**
  * You almost certainly do not want to change these
@@ -40,14 +41,14 @@ define( 'DB_COLLATE', '' );
  *
  * Props to https://gist.github.com/earthgecko/3089509 for some hints there
  */
-define( 'AUTH_KEY',         '{{key "wordpress/config/AUTH_KEY"}}' );
-define( 'SECURE_AUTH_KEY',  '{{key "wordpress/config/SECURE_AUTH_KEY"}}' );
-define( 'LOGGED_IN_KEY',    '{{key "wordpress/config/LOGGED_IN_KEY"}}' );
-define( 'NONCE_KEY',        '{{key "wordpress/config/NONCE_KEY"}}' );
-define( 'AUTH_SALT',        '{{key "wordpress/config/AUTH_SALT"}}' );
-define( 'SECURE_AUTH_SALT', '{{key "wordpress/config/SECURE_AUTH_SALT"}}' );
-define( 'LOGGED_IN_SALT',   '{{key "wordpress/config/LOGGED_IN_SALT"}}' );
-define( 'NONCE_SALT',       '{{key "wordpress/config/NONCE_SALT"}}' );
+define( 'AUTH_KEY',         '{{env "WORDPRESS_AUTH_KEY"}}' );
+define( 'SECURE_AUTH_KEY',  '{{env "WORDPRESS_SECURE_AUTH_KEY"}}' );
+define( 'LOGGED_IN_KEY',    '{{env "WORDPRESS_LOGGED_IN_KEY"}}' );
+define( 'NONCE_KEY',        '{{env "WORDPRESS_NONCE_KEY"}}' );
+define( 'AUTH_SALT',        '{{env "WORDPRESS_AUTH_SALT"}}' );
+define( 'SECURE_AUTH_SALT', '{{env "WORDPRESS_SECURE_AUTH_SALT"}}' );
+define( 'LOGGED_IN_SALT',   '{{env "WORDPRESS_LOGGED_IN_SALT"}}' );
+define( 'NONCE_SALT',       '{{env "WORDPRESS_NONCE_SALT"}}' );
 
 /**
  * Table prefix
@@ -71,13 +72,11 @@ define( 'WP_DEBUG_DISPLAY', {{key_or_default "wordpress/config/WP_DEBUG_DISPLAY"
  * Debug mode
  * Debugging? Enable these.
  */
-define( 'SAVEQUERIES', {{key_or_default "wordpress/config/SAVEQUERIES" "true" | parseInt}} );
-define( 'WP_DEBUG', {{key_or_default "wordpress/config/WP_DEBUG" "true" | parseInt}} );
 
 /**
  * Load the Memcached config
  */
-$memcached_servers = include( dirname( __FILE__ ) . '/memcached-config.php' );
+include( dirname( __FILE__ ) . '/memcached-config.php' );
 
 /**
  * Bootstrap WordPress

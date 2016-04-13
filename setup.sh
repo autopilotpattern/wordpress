@@ -9,7 +9,7 @@ unset MANTA_PRIVATE_KEY
 unset NGINX_CONF
 unset NGINX_CONTAINERBUDDY
 
-MANTA_PRIVATE_KEY=`cat manta.id_rsa`
+export MANTA_PRIVATE_KEY=`cat manta.id_rsa`
 #MANTA_KEY_ID=`ssh-keygen -lf manta.id_rsa.pub | awk -F ' ' '{print $2}'`
-NGINX_CONF=`cat nginx.conf.ctmpl`
-NGINX_CONTAINERBUDDY=`cat nginx_containerbuddy.json`
+export NGINX_CONF=$(cat nginx/nginx.conf.ctmpl)
+export NGINX_CONTAINERBUDDY=`cat nginx/containerbuddy.json`

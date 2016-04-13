@@ -1,46 +1,89 @@
 wordpress:
+  image: jasondewitt/wordpress:latest
+  privileged: true
+  env_file: _env
+  environment:
+    - CONTAINERBUDDY=file:///etc/containerbuddy.json
   restart: always
-  extends:
-    file: common-compose.yml
-    service: wordpress
   mem_limit: 1g
-  links:
-    - consul:consul
-    - nfs:nfs
+  labels:
+    - triton.cns.services=wordpress
   ports:
     - 80
 
+nfs:
+  image: jasondewitt/nfsserver:latest
+  privileged: true
+  env_file: _env
+  mem_limit: 256m
+  restart: always
+  labels:
+    - triton.cns.services=nfs
+  expose:
+    - 111
+    - 1892
+    - 2049
+
 mysql:
-    extends:
-      file: common-compose.yml
-      service: mysql
-    restart: always
-    links:
-      - consul:consul
-    expose:
-      - 3306
+  #image: 0x74696d/triton-mysql:latest
+  image: jasondewitt/autopilot-mysql:latest
+  mem_limit: 4g
+  env_file: _env
+  environment:
+    - CONTAINERBUDDY=file:///etc/containerbuddy.json
+    - MANTA_PRIVATE_KEY
+  restart: always
+  labels:
+    - triton.cns.services=mysql
+  expose:
+    - 3306
 
 memcached:
-  extends:
-    file: common-compose.yml
-    service: memcached
-  links:
-    - consul:consul
+  image: jasondewitt/memcached:latest
+  mem_limit: 512m
+  env_file: _env
+  environment:
+    - CONTAINERBUDDY=file:///etc/containerbuddy.json
+  ports:
+    - 11211
+  labels:
+    - triton.cns.services=memcached
   restart: always
 
 # Nginx as a load-balancing tier and reverse proxy
 nginx:
-  extends:
-    file: common-compose.yml
-    service: nginx
+  image: 0x74696d/triton-nginx:latest
+  mem_limit: 512m
+  ports:
+  - 80
+  env_file: _env
+  environment:
+    - NGINX_CONF
+  command: >
+    /opt/containerbuddy/containerbuddy -config '{"consul":"{{.CONSUL}}:8500","preStart":"/opt/containerbuddy/reload.sh preStart","services":[{"name":"nginx","port": 80,"publicIp": true,"health":"/usr/bin/curl --fail -s http://localhost/health.txt","poll":10,"ttl":25}],"backends":[{"name":"wordpress","poll":5,"onChange":"/opt/containerbuddy/reload.sh"}]}'
+    nginx -g "daemon off;"
   restart: always
   ports:
   - "80"
-  links:
-    - consul:consul
+  labels:
+    - triton.cns.services=nginx
 
 consul:
-    restart: always
-    extends:
-      file: common-compose.yml
-      service: consul
+  image: progrium/consul:latest
+  command: -server -bootstrap -ui-dir /ui
+  env_file: _env
+  mem_limit: 128m
+  ports:
+    - 8500
+  expose:
+    - 53
+    - 8300
+    - 8301
+    - 8302
+    - 8400
+    - 8500
+  dns:
+    - 127.0.0.1
+  restart: always
+  labels:
+    - triton.cns.services=consul

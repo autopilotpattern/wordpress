@@ -48,15 +48,12 @@ RUN export CONTAINERBUDDY_CHECKSUM=c25d3af30a822f7178b671007dcd013998d9fae1 \
 
 # Install Consul template
 # Releases at https://releases.hashicorp.com/consul-template/
-ENV CONSUL_TEMPLATE_VERSION 0.12.2
-ENV CONSUL_TEMPLATE_SHA1 a8780f365bf5bfad47272e4682636084a7475ce74b336cdca87c48a06dd8a193
+ENV CONSUL_TEMPLATE_VERSION 0.14.0
+ENV CONSUL_TEMPLATE_SHA1 7c70ea5f230a70c809333e75fdcff2f6f1e838f29cfb872e1420a63cdf7f3a78
 RUN curl --retry 7 -Lso /tmp/consul-template.zip "https://releases.hashicorp.com/consul-template/${CONSUL_TEMPLATE_VERSION}/consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip" \
     && echo "${CONSUL_TEMPLATE_SHA1}  /tmp/consul-template.zip" | sha256sum -c \
     && unzip /tmp/consul-template.zip -d /usr/local/bin \
     && rm /tmp/consul-template.zip
-
-# Make the WP uploads directory writeable by the web server
-#RUN chown -R www-data:www-data /var/www/html/content/uploads
 
 # install wp-cli, http://wp-cli.org
 ENV WP_CLI_CONFIG_PATH /var/www/html/wp-cli.yml
@@ -73,7 +70,7 @@ COPY /var/www/html /var/www/html
 ENV WORDPRESS_VERSION 4.4.2
 # install WordPress via wp-cli & copy the default themes to our content dir
 RUN wp --allow-root core download --version=${WORDPRESS_VERSION} \
-    && cp -r /var/www/html/wordpress/wp-content/themes/* /var/www/html/content/themes/
+    && mv /var/www/html/wordpress/wp-content/themes/* /var/www/html/content/themes/
 
 
 # install HyperDB, https://wordpress.org/plugins/hyperdb

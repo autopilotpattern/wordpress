@@ -25,7 +25,7 @@ http {
 
     {{ if service "wordpress" }}
     upstream wordpress {
-        # write the address:port pairs for each healthy Customers node
+        # write the address:port pairs for each healthy wordpress node
         {{range service "wordpress"}}
         server {{.Address}}:{{.Port}};
         {{end}}

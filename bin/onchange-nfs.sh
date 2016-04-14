@@ -3,7 +3,8 @@
 if [[ `curl -s ${CONSUL}:8500/v1/health/state/passing | grep nfs`  ]]
 then
   echo "nfs is healthy, mounting uploads directory...."
-  mount -t nfs -v -o nolock,vers=3 nfs:/exports /var/www/html/content/uploads
+  NFS=$(curl -s http://${CONSUL}:8500/v1/catalog/service/nfs?passing | jq -r '.[0] | .ServiceAddress')
+  mount -t nfs -v -o nolock,vers=3 ${NFS}:/exports /var/www/html/content/uploads
   echo "removing no-uploads.php mu-plugin"
   rm /var/www/html/content/mu-plugins/no-uploads.php
   # check 'wp core is-installed' here to prevent errors in the log on first run

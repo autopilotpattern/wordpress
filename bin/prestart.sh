@@ -15,17 +15,17 @@ do
   sleep 5
 done
 
-#until [[ `curl -s ${CONSUL}:8500/v1/health/state/passing | grep nfs`  ]]
-#do
-#  echo "no healthly nfs server avaliable yet...."
-#  sleep 5
-#done
+until [[ `curl -s ${CONSUL}:8500/v1/health/state/passing | grep nfs`  ]]
+do
+  echo "no healthly nfs server avaliable yet...."
+  sleep 5
+done
 
 echo "mysql-primary and nfs are now healthly, moving on..."
 
 /usr/local/bin/onchange-db.sh
 /usr/local/bin/onchange-memcached.sh
-#/usr/local/bin/onchange-nfs.sh
+/usr/local/bin/onchange-nfs.sh
 
 # The WordPress config file
 /usr/local/bin/onchange-wp-config.sh

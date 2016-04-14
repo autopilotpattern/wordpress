@@ -5,14 +5,14 @@ RUN a2enmod rewrite
 # install the PHP extensions we need, and other packages
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        less \
-        libpng12-dev \
-        libjpeg-dev \
-        unzip \
         curl \
-        nfs-common \
+        jq \
+        less \
+        libjpeg-dev \
         libmemcached-dev \
-        vim \
+        libpng12-dev \
+        nfs-common \
+        unzip \
     && rm -rf /var/lib/apt/lists/* \
     && pecl install memcached \
     && docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
@@ -67,7 +67,7 @@ RUN curl -Ls -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp
 COPY /var/www/html /var/www/html
 
 
-ENV WORDPRESS_VERSION 4.4.2
+ENV WORDPRESS_VERSION 4.5
 # install WordPress via wp-cli & copy the default themes to our content dir
 RUN wp --allow-root core download --version=${WORDPRESS_VERSION} \
     && mv /var/www/html/wordpress/wp-content/themes/* /var/www/html/content/themes/

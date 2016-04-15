@@ -14,9 +14,6 @@ MANTA_KEY_ID=
 MANTA_PRIVATE_KEY=
 MANTA_BUCKET=
 
-JOYENT_ACCOUNT_UUID=
-JOYENT_DATA_CENTER=
-
 WORDPRESS_VERSION=4.1
 # please include the scheme http:// or https:// in the URL variable
 WORDPRESS_URL=http://localhost
@@ -41,7 +38,4 @@ WORDPRESS_SECURE_AUTH_SALT=
 WORDPRESS_LOGGED_IN_SALT=
 WORDPRESS_NONCE_SALT=
 
-# on trition
 CONSUL=consul.svc.{your-account-uuid}.{target-data-center}.cns.joyent.com
-# local
-#CONSUL=consul

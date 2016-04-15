@@ -44,6 +44,14 @@ else
   # wp option update for siteurl REQUIRES http://, need to determine will we handle that here
   # or ask for it in the _env file or test for it above
   wp --allow-root option update siteurl `wp --allow-root option get siteurl`/wordpress
+  # set a nice default permalink structure
+  wp --allow-root option update permalink_structure '/%year%/%monthnum%/%postname%/'
+  # set theme
+  if [ $WORDPRESS_ACTIVE_THEME ]
+  then
+    wp --allow-root theme activate $WORDPRESS_ACTIVE_THEME
+  fi
+
   if [ $WORDPRESS_TEST_DATA ]
   then
     echo "installing WP test content"

@@ -12,4 +12,4 @@ unset NGINX_CONTAINERBUDDY
 export MANTA_PRIVATE_KEY=`cat manta.id_rsa`
 #MANTA_KEY_ID=`ssh-keygen -lf manta.id_rsa.pub | awk -F ' ' '{print $2}'`
 export NGINX_CONF=$(cat nginx/nginx.conf.ctmpl)
-export NGINX_CONTAINERBUDDY=`cat nginx/containerbuddy.json`
+#export NGINX_CONTAINERBUDDY=$(cat nginx/containerbuddy.json | tr --delete "\n")

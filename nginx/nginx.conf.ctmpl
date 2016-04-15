@@ -45,8 +45,11 @@ http {
         }
 
         {{ if service "wordpress" }}
+        rewrite ^/wp-admin/?(.*) /wordpress/wp-admin/$1;
+        
         location ^~ / {
             proxy_pass http://wordpress;
+            proxy_set_header Host $http_host;
             proxy_redirect off;
         }{{end}}
 

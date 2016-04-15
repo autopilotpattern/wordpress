@@ -67,5 +67,7 @@ consul:
     file: docker-compose.yml
     service: consul
   restart: never
+  environment:
+    - CONSUL=consul
   ports:
   - "8500:8500"

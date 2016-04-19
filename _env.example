@@ -1,9 +1,12 @@
 # Environment variables for MySQL service
+# WordPress database information
 MYSQL_USER=wpuser
 MYSQL_PASSWORD=userpassword
+MYSQL_DATABASE=test
+# MySQL replication user, should be different from above
 MYSQL_REPL_USER=repluser
 MYSQL_REPL_PASSWORD=replpassword
-MYSQL_DATABASE=test
+
 
 # Environment variables for backups to Manta
 MANTA_URL=
@@ -14,7 +17,6 @@ MANTA_KEY_ID=
 MANTA_PRIVATE_KEY=
 MANTA_BUCKET=
 
-WORDPRESS_VERSION=4.1
 # please include the scheme http:// or https:// in the URL variable
 WORDPRESS_URL=http://localhost
 WORDPRESS_SITE_TITLE=test site

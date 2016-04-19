@@ -1,5 +1,5 @@
 wordpress:
-  image: jasondewitt/wordpress:latest
+  image: build .
   privileged: true
   env_file: _env
   environment:
@@ -12,7 +12,7 @@ wordpress:
     - 80
 
 nfs:
-  image: jasondewitt/nfsserver:latest
+  image: autopilotpattern/nfsserver
   privileged: true
   env_file: _env
   mem_limit: 256m
@@ -31,7 +31,6 @@ mysql:
   env_file: _env
   environment:
     - CONTAINERBUDDY=file:///etc/containerbuddy.json
-    - MANTA_PRIVATE_KEY
   restart: always
   labels:
     - triton.cns.services=mysql

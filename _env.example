@@ -38,4 +38,4 @@ WORDPRESS_SECURE_AUTH_SALT=
 WORDPRESS_LOGGED_IN_SALT=
 WORDPRESS_NONCE_SALT=
 
-CONSUL=consul
+CONSUL=consul.svc.{your-account-uuid}.{target-data-center}.cns.joyent.com

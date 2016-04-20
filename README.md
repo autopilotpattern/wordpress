@@ -21,7 +21,7 @@ A running cluster includes the following components:
 - [Nginx](https://github.com/autopilotpattern/nginx): Front-end load balancer for the WordPress envrionment, passes traffic from users to the WordPress containers on the back-end.
 
 ### How do I use this thing?
-
+Clone this repository and place the WordPress theme you want to use into the `var/www/html/content/themes` directory. Follow the instructions below to set up your system to run containers on [Triton](https://www.joyent.com/) and configure your envrionment.
 
 ### Getting started
 
@@ -100,4 +100,4 @@ CONSUL=consul.svc.{your-account-uuid}.{target-data-center}.cns.joyent.com
 Finally we need to configure an envrionment variable with the location of our consul container in Joyent's Container Name Service. This name will allow the other containers in our environment to find Consul via a DNS lookup. Your account UUID by executing `triton account get` on your command line. In the local-compose.yml file you will notice that this varible is overridden to be simply 'consul' for local development.
 
 #### Start the containers!
-After configuring everything, we are now ready to start the containers. To do that simply execute `docker-compose up -d`
+After configuring everything, we are now ready to start the containers. To do that simply execute `docker-compose up -d`, this will build the WordPress image, containing your theme from this repo, and spin it up on Triton. Change the DNS settings for your `WORDPRESS_URL` to point to the ip address for your nginx container and open in a browser.

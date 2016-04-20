@@ -99,5 +99,8 @@ CONSUL=consul.svc.{your-account-uuid}.{target-data-center}.cns.joyent.com
 ```
 Finally we need to configure an envrionment variable with the location of our consul container in Joyent's Container Name Service. This name will allow the other containers in our environment to find Consul via a DNS lookup. Your account UUID by executing `triton account get` on your command line. In the local-compose.yml file you will notice that this varible is overridden to be simply 'consul' for local development.
 
+#### Nginx container configuration
+One thing to note, this project passes custom configurations to the nginx container, for nginx itself and ContainerPilot. This allows us to implement a resuable nginx container, while still having custom backends in the proxy pass configuration and project-specific health checks and backends in ContainerPilot.
+
 #### Start the containers!
 After configuring everything, we are now ready to start the containers. To do that simply execute `docker-compose up -d`, this will build the WordPress image, containing your theme from this repo, and spin it up on Triton. Change the DNS settings for your `WORDPRESS_URL` to point to the ip address for your nginx container and open in a browser.

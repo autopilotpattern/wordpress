@@ -1,5 +1,5 @@
 wordpress:
-  image: build .
+  build: .
   privileged: true
   env_file: _env
   environment:
@@ -57,7 +57,6 @@ nginx:
   - 80
   env_file: _env
   environment:
-    - NGINX_CONF
     - NGINX_CONTAINERBUDDY
   command: >
     /opt/containerbuddy/containerbuddy -config '{"backends":[{"onChange":"/opt/containerbuddy/reload.sh","poll":5,"name":"wordpress"}],"services":[{"ttl":25,"poll":10,"health":"/usr/bin/curl --fail -s http://localhost/health.txt","publicIp":true,"port":80,"name":"nginx"}],"preStart":"/opt/containerbuddy/reload.sh preStart","consul":"{{.CONSUL}}:8500"}'

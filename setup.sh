@@ -107,7 +107,7 @@ check() {
         echo MANTA_PRIVATE_KEY=${MANTA_PRIVATE_KEY} >> _env
         echo MANTA_KEY_ID=`ssh-keygen -lf ${MANTA_KEY_PATH} | awk -F ' ' '{print $2}'` >> _env
         echo NGINX_CONF=$(cat nginx/nginx.conf.ctmpl) >> _env
-        #echo NGINX_CONTAINERBUDDY=$(cat nginx/containerbuddy.json | tr --delete "\n") >> _env
+        echo NGINX_CONTAINERBUDDY=$(cat nginx/containerbuddy.json | tr --delete "\n") >> _env
         echo 'Edit the _env file to configure your WordPress envrionment'
     fi
 }

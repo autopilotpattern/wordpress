@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e -o pipefail
+#set -e -o pipefail
 
 help() {
     echo 'Usage ./setup.sh [-k /path/to/private/key] [-f docker-compose.yml] [-p project]'
@@ -104,11 +104,21 @@ check() {
         echo "Creating a configuration file..."
         cp _env.example _env
         echo >> _env
-        echo MANTA_PRIVATE_KEY=${MANTA_PRIVATE_KEY} >> _env
-        echo MANTA_KEY_ID=`ssh-keygen -lf ${MANTA_KEY_PATH} | awk -F ' ' '{print $2}'` >> _env
+        echo MANTA_PRIVATE_KEY=$(cat ${MANTA_PRIVATE_KEY_PATH} | tr '\n' '#') >> _env
+
+        ssh-keygen -yl -E md5 -f ${MANTA_PRIVATE_KEY_PATH} > /dev/null 2>&1
+        if [ $? -eq 0 ]
+        then
+          echo MANTA_KEY_ID=$(ssh-keygen -yl -E md5 -f ${MANTA_PRIVATE_KEY_PATH} | awk '{print substr($2,5)}') >> _env
+        else
+          echo MANTA_KEY_ID=$(ssh-keygen -yl -f ${MANTA_PRIVATE_KEY_PATH} | awk '{print $2}') >> _env
+        fi
         echo NGINX_CONF=$(cat nginx/nginx.conf.ctmpl) >> _env
         echo NGINX_CONTAINERBUDDY=$(cat nginx/containerbuddy.json | tr --delete "\n") >> _env
         echo 'Edit the _env file to configure your WordPress envrionment'
+    else
+        echo 'exiting _env file found, exiting.'
+        echo
     fi
 }
 
@@ -119,14 +129,13 @@ while getopts "f:p:k:h" optchar; do
     case "${optchar}" in
         f) export COMPOSE_FILE=${OPTARG} ;;
         p) export COMPOSE_PROJECT_NAME=${OPTARG} ;;
-        k) export MANTA_PRIVATE_KEY=`cat ${OPTARG}`
-           export MANTA_KEY_PATH=${OPTARG}
+        k) export MANTA_PRIVATE_KEY_PATH=${OPTARG}
            ;;
     esac
 done
 shift $(expr $OPTIND - 1 )
 
-if [ -z "$MANTA_PRIVATE_KEY" ]
+if [ -z "$MANTA_PRIVATE_KEY_PATH" ]
 then
   help
   exit

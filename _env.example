@@ -1,43 +1,44 @@
 # Environment variables for MySQL service
-# WordPress database information
 MYSQL_USER=wpuser
-MYSQL_PASSWORD=userpassword
-MYSQL_DATABASE=test
-# MySQL replication user, should be different from above
+MYSQL_PASSWORD=4qyqAchpuMYC2jz
 MYSQL_REPL_USER=repluser
-MYSQL_REPL_PASSWORD=replpassword
-
+MYSQL_REPL_PASSWORD=MKmw0MEEFGddo1o
+MYSQL_DATABASE=test
 
 # Environment variables for backups to Manta
-MANTA_URL=
-MANTA_USER=
-MANTA_SUBUSER=
-MANTA_ROLE=
-MANTA_KEY_ID=
-MANTA_PRIVATE_KEY=
-MANTA_BUCKET=
+MANTA_URL=https://us-east.manta.joyent.com
+MANTA_USER=jasondewitt
+MANTA_SUBUSER=triton_mysql
+MANTA_ROLE=triton-mysql-user
+MANTA_KEY_ID=a9:cf:a8:b9:c5:70:41:54:c8:9f:27:da:cd:b3:24:b7
+#MANTA_PRIVATE_KEY=$(cat manta)
+MANTA_BUCKET=/jasondewitt/stor/mysql
 
-# please include the scheme http:// or https:// in the URL variable
-WORDPRESS_URL=http://localhost
+WORDPRESS_URL=http://dockertest.10uplabs.com
 WORDPRESS_SITE_TITLE=test site
-WORDPRESS_ADMIN_EMAIL=username@domain.com
-WORDPRESS_ADMIN_USER=username
-WORDPRESS_ADMIN_PASSWORD=password
-WORDPRESS_ACTIVE_THEME=theme
-WORDPRESS_CACHE_KEY_SALT=some-unique-string
-#WORDPRESS_TEST_DATA=False
+WORDPRESS_ADMIN_EMAIL=jason.dewitt@10up.com
+WORDPRESS_ADMIN_USER=jason
+WORDPRESS_ADMIN_PASSWORD=jason
+WORDPRESS_ACTIVE_THEME=twentyfourteen
+WORDPRESS_CACHE_KEY_SALT=triton-001
+#WORDPRESS_TEST_DATA=true
 
-# Wordpress unique salts - these must be unique for your install to ensure
-# login security. visit the following link to generate a set for your site and
-# include them here
-# https://api.wordpress.org/secret-key/1.1/salt/
-WORDPRESS_AUTH_KEY=
-WORDPRESS_SECURE_AUTH_KEY=
-WORDPRESS_LOGGED_IN_KEY=
-WORDPRESS_NONCE_KEY=
-WORDPRESS_AUTH_SALT=
-WORDPRESS_SECURE_AUTH_SALT=
-WORDPRESS_LOGGED_IN_SALT=
-WORDPRESS_NONCE_SALT=
+WORDPRESS_AUTH_KEY=|B%x(*5o09:(3{omVI->G8WP6mWsa?W]j!SYXP`-uK[OBG*(+y}LtzH4_!@T;34@
+WORDPRESS_SECURE_AUTH_KEY=Cn{zrz35#$on?-@&f-?g21BvAR8._a1~.=1yvx=~q3 HUWT blmfd}($8/RPjE4N
+WORDPRESS_LOGGED_IN_KEY=TjA@.m.s&qibx3m-?~1.G$|eBYpX.La0Y#^m8nxN.;*Nc|lKz+^[U69$JVX%Ei4-
+WORDPRESS_NONCE_KEY=hwY*#?v#yp6ew+KAp_H-?WTXlUj}R208SyRh;!wW-+J?g@C*Mj`UavV=l5PMPWk3
+WORDPRESS_AUTH_SALT=~$=zX;kA--%2Tt8244Ec/d3BMjMwQ+}ubJ{8)jZHEv>jo[dx0A9%d(iS?2/h9eA_
+WORDPRESS_SECURE_AUTH_SALT=C*;2im-<{Mv?4CW5AB>)^Cb|cVH:> eu%ic!EK-fAxQ=zx;m* [~NY;=]6etE5P?
+WORDPRESS_LOGGED_IN_SALT=YR-oqS?-L=@(5d4]7>)}</O1Ny8VS>ZaJ|I |9%$T=Yf3y3S&]^!}cxn^T~m#.+Y
+WORDPRESS_NONCE_SALT=0biAx?{|:EyH?W1BXI!)%>QkQc*H=rQ(.q|5{K-{v{n^$-<AIfs+LC9T|G/&{Weu
 
-CONSUL=consul.svc.{your-account-uuid}.{target-data-center}.cns.joyent.com
+#CONSUL=consul
+CONSUL=consul.svc.42159d0c-a7d9-4bcd-81bf-ec3166bd2895.us-sw-1.cns.joyent.com
+TRITON_MYSQL_CONSUL=consul.svc.42159d0c-a7d9-4bcd-81bf-ec3166bd2895.us-sw-1.cns.joyent.com
+
+CF_API_KEY=820787db55d598dc60a7c7fbef78c9117f540
+CF_AUTH_EMAIL=zach@10up.com
+CF_ROOT_DOMAIN=10uplabs.com
+SERVICE=nginx
+RECORD=dockertest
+TTL=60

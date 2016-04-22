@@ -28,8 +28,6 @@ mysql:
   image: autopilotpattern/mysql:latest
   mem_limit: 4g
   env_file: _env
-  environment:
-    - CONTAINERBUDDY=file:///etc/containerbuddy.json
   restart: always
   labels:
     - triton.cns.services=mysql
@@ -37,7 +35,7 @@ mysql:
     - 3306
 
 memcached:
-  image: jasondewitt/memcached:latest
+  image: autopilotpattern/memcached:latest
   mem_limit: 512m
   env_file: _env
   environment:
@@ -50,13 +48,16 @@ memcached:
 
 # Nginx as a load-balancing tier and reverse proxy
 nginx:
-  image: 0x74696d/triton-nginx:latest
+  build: nginx/
   mem_limit: 512m
   ports:
   - 80
   env_file: _env
+  environment:
+    - NGINX_CONF=/etc/nginx.conf.ctmpl
+    - CONTAINERPILOT=file:///etc/containerpilot.json
   command: >
-    /opt/containerbuddy/containerbuddy -config '{"backends":[{"onChange":"/opt/containerbuddy/reload.sh","poll":5,"name":"wordpress"}],"services":[{"ttl":25,"poll":10,"health":"/usr/bin/curl --fail -s http://localhost/health.txt","publicIp":true,"port":80,"name":"nginx"}],"preStart":"/opt/containerbuddy/reload.sh preStart","consul":"{{.CONSUL}}:8500"}'
+    /usr/local/bin/containerpilot
     nginx -g "daemon off;"
   restart: always
   ports:

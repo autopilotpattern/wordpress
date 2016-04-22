@@ -1,0 +1,21 @@
+{
+  "backends": [
+    {
+      "onChange": "/usr/local/bin/reload.sh",
+      "poll": 5,
+      "name": "wordpress"
+    }
+  ],
+  "services": [
+    {
+      "ttl": 25,
+      "poll": 10,
+      "health": "/usr/bin/curl --fail -s http://localhost/health.txt",
+      "publicIp": true,
+      "port": 80,
+      "name": "nginx"
+    }
+  ],
+  "preStart": "/usr/local/bin/reload.sh preStart",
+  "consul": "{{.CONSUL}}:8500"
+}

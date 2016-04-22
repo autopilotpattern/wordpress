@@ -1,0 +1,86 @@
+wordpress:
+  build: .
+  privileged: true
+  env_file: _env
+  environment:
+    - CONTAINERBUDDY=file:///etc/containerbuddy.json
+  restart: always
+  mem_limit: 1g
+  labels:
+    - triton.cns.services=wordpress
+  ports:
+    - 80
+
+nfs:
+  image: autopilotpattern/nfsserver
+  privileged: true
+  env_file: _env
+  mem_limit: 256m
+  restart: always
+  labels:
+    - triton.cns.services=nfs
+  expose:
+    - 111
+    - 1892
+    - 2049
+
+mysql:
+  image: autopilotpattern/mysql:latest
+  mem_limit: 4g
+  env_file: _env
+  restart: always
+  labels:
+    - triton.cns.services=mysql
+  expose:
+    - 3306
+
+memcached:
+  image: autopilotpattern/memcached:latest
+  mem_limit: 512m
+  env_file: _env
+  environment:
+    - CONTAINERBUDDY=file:///etc/containerbuddy.json
+  ports:
+    - 11211
+  labels:
+    - triton.cns.services=memcached
+  restart: always
+
+# Nginx as a load-balancing tier and reverse proxy
+nginx:
+  build: nginx/
+  mem_limit: 512m
+  ports:
+  - 80
+  env_file: _env
+  environment:
+    - NGINX_CONF=/etc/nginx.conf.ctmpl
+    - CONTAINERPILOT=file:///etc/containerpilot.json
+  command: >
+    /usr/local/bin/containerpilot
+    nginx -g "daemon off;"
+  restart: always
+  ports:
+  - "80"
+  labels:
+    - triton.cns.services=nginx
+
+consul:
+  image: progrium/consul:latest
+  command: -server -bootstrap -ui-dir /ui
+  env_file: _env
+  mem_limit: 128m
+  ports:
+    - 8500
+  expose:
+    - 53
+    - 8300
+    - 8301
+    - 8302
+    - 8400
+    - 8500
+  dns:
+    - 127.0.0.1
+  restart: always
+  labels:
+    - triton.cns.services=consul

@@ -1,6 +1,6 @@
+# credentials
+_env*
+manta*
+
+# macos frustration
 .DS_Store
-manta.id_rsa
-manta.id_rsa.pub
-_env
-_env.backup
-_env.example.backup

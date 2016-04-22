@@ -25,7 +25,7 @@ else
   echo "nfs is not healthly, umounting uploads directory..."
   umount -f -l /var/www/html/content/uploads
   echo "creating mu-plugin for NFS error in wp-admin"
-  cp /var/www/html/inactive_plugins/no-uploads.php /var/www/html/content/mu-plugins/
+  cp /var/www/html/inactive-plugins/no-uploads.php /var/www/html/content/mu-plugins/
 
   echo "removing 'upload_files' capability from all roles..."
   for role in $(wp --allow-root role list --fields=role --format=csv)

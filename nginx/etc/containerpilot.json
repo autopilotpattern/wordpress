@@ -1,7 +1,7 @@
 {
   "backends": [
     {
-      "onChange": "/opt/containerbuddy/reload.sh",
+      "onChange": "/usr/local/bin/reload.sh",
       "poll": 5,
       "name": "wordpress"
     }
@@ -16,6 +16,6 @@
       "name": "nginx"
     }
   ],
-  "preStart": "/opt/containerbuddy/reload.sh preStart",
+  "preStart": "/usr/local/bin/reload.sh preStart",
   "consul": "{{.CONSUL}}:8500"
 }

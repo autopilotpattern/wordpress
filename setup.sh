@@ -1,5 +1,5 @@
 #!/bin/bash
-#set -e -o pipefail
+set -e
 
 help() {
     echo 'Usage ./setup.sh [-k /path/to/private/key] [-f docker-compose.yml] [-p project]'
@@ -113,8 +113,6 @@ check() {
         else
           echo MANTA_KEY_ID=$(ssh-keygen -yl -f ${MANTA_PRIVATE_KEY_PATH} | awk '{print $2}') >> _env
         fi
-        echo NGINX_CONF=$(cat nginx/nginx.conf.ctmpl) >> _env
-        echo NGINX_CONTAINERBUDDY=$(cat nginx/containerbuddy.json | tr --delete "\n") >> _env
         echo 'Edit the _env file to configure your WordPress envrionment'
     else
         echo 'exiting _env file found, exiting.'

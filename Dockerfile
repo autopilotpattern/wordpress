@@ -2,7 +2,7 @@ FROM php:5.6-apache
 
 RUN a2enmod rewrite
 
-# install the PHP extensions we need, and other packages
+# Install the PHP extensions we need, and other packages
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         curl \
@@ -19,8 +19,8 @@ RUN apt-get update \
     && docker-php-ext-install gd mysqli opcache \
     && docker-php-ext-enable memcached
 
-# set recommended PHP.ini settings
-# see https://secure.php.net/manual/en/opcache.installation.php
+# Set recommended PHP.ini settings
+# See https://secure.php.net/manual/en/opcache.installation.php
 RUN { \
         echo 'opcache.memory_consumption=128'; \
         echo 'opcache.interned_strings_buffer=8'; \
@@ -29,7 +29,6 @@ RUN { \
         echo 'opcache.fast_shutdown=1'; \
         echo 'opcache.enable_cli=1'; \
     } > /usr/local/etc/php/conf.d/opcache-recommended.ini
-
 
 # The our helper/glue scripts and configuration for this specific app
 COPY bin /usr/local/bin
@@ -55,26 +54,24 @@ RUN curl --retry 7 -Lso /tmp/consul-template.zip "https://releases.hashicorp.com
     && unzip /tmp/consul-template.zip -d /usr/local/bin \
     && rm /tmp/consul-template.zip
 
-# install wp-cli, http://wp-cli.org
+# Install wp-cli, http://wp-cli.org
 ENV WP_CLI_CONFIG_PATH /var/www/html/wp-cli.yml
 RUN curl -Ls -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
     && chmod +x wp-cli.phar \
     && mv wp-cli.phar /usr/local/bin/wp \
     && wp --info --allow-root
 
-# copy the WordPress skeleton from this repo into the container
-# this includes any themes and/or plugins we've added to the content/themes and content/plugins, etc, directories.
+# Copy the WordPress skeleton from this repo into the container
+# This includes any themes and/or plugins we've added to the content/themes and content/plugins directories.
 COPY /var/www/html /var/www/html
 RUN chown -R www-data:www-data /var/www/html/*
 
-
+# Install WordPress via wp-cli & move the default themes to our content dir
 ENV WORDPRESS_VERSION 4.5
-# install WordPress via wp-cli & copy the default themes to our content dir
 RUN wp --allow-root core download --version=${WORDPRESS_VERSION} \
     && mv /var/www/html/wordpress/wp-content/themes/* /var/www/html/content/themes/
 
-
-# install HyperDB, https://wordpress.org/plugins/hyperdb
+# Install HyperDB, https://wordpress.org/plugins/hyperdb
 # Releases at https://wordpress.org/plugins/hyperdb/developers/ , though no SHA1 fingerprints are published
 ENV HYPERDB_VERSION 1.1
 RUN curl -Ls -o /var/www/html/hyperdb.zip https://downloads.wordpress.org/plugin/hyperdb.${HYPERDB_VERSION}.zip \
@@ -84,11 +81,10 @@ RUN curl -Ls -o /var/www/html/hyperdb.zip https://downloads.wordpress.org/plugin
     && rm -rf /var/www/html/hyperdb.zip /var/www/html/hyperdb \
     && touch /var/www/html/content/db-config.php
 
-# install ztollman's object-cache.php or object caching to memcached
+# Install ztollman's object-cache.php or object caching to memcached
 RUN curl -Ls -o /var/www/html/content/object-cache.php https://raw.githubusercontent.com/tollmanz/wordpress-pecl-memcached-object-cache/master/object-cache.php
 
-
-# the volume is defined after we install everything
+# The volume is defined after we install everything
 VOLUME /var/www/html
 
 CMD ["/usr/local/bin/containerpilot", \

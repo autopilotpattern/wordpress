@@ -36,7 +36,7 @@ mysql:
     - consul:consul
   environment:
     - CONSUL=consul
-    - TRITON_MYSQL_CONSUL=consul
+    - CONTAINERPILOT=file:///etc/containerpilot.json
   ports:
     - "3306"
 

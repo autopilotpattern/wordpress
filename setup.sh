@@ -1,15 +1,18 @@
 #!/bin/bash
-set -e -o pipefail
+set -e
 
 help() {
-    echo 'Usage ./setup.sh [-f docker-compose.yml] [-p project]'
+    echo 'Usage ./setup.sh [-k /path/to/private/key] [-f docker-compose.yml] [-p project]'
     echo
     echo 'Checks that your Triton and Docker environment is sane and configures'
     echo 'an environment file to use.'
     echo
+    echo 'Required flags:'
+    echo '  -k /path/to/private/key    path to the private key used to access Manta'
+    echo
     echo 'Optional flags:'
-    echo '  -f <filename>   use this file as the docker-compose config file'
-    echo '  -p <project>    use this name as the project prefix for docker-compose'
+    echo '  -f <filename>              use this file as the docker-compose config file'
+    echo '  -p <project>               use this name as the project prefix for docker-compose'
 }
 
 
@@ -101,24 +104,40 @@ check() {
         echo "Creating a configuration file..."
         cp _env.example _env
         echo >> _env
-        echo MANTA_PRIVATE_KEY=`cat manta.id_rsa` >> _env
-        #echo MANTA_KEY_ID=`ssh-keygen -lf manta.id_rsa.pub | awk -F ' ' '{print $2}'` >> _env
-        echo NGINX_CONF=$(cat nginx/nginx.conf.ctmpl) >> _env
-        #echo NGINX_CONTAINERBUDDY=$(cat nginx/containerbuddy.json | tr --delete "\n") >> _env
+        echo MANTA_PRIVATE_KEY=$(cat ${MANTA_PRIVATE_KEY_PATH} | tr '\n' '#') >> _env
+
+        ssh-keygen -yl -E md5 -f ${MANTA_PRIVATE_KEY_PATH} > /dev/null 2>&1
+        if [ $? -eq 0 ]
+        then
+          echo MANTA_KEY_ID=$(ssh-keygen -yl -E md5 -f ${MANTA_PRIVATE_KEY_PATH} | awk '{print substr($2,5)}') >> _env
+        else
+          echo MANTA_KEY_ID=$(ssh-keygen -yl -f ${MANTA_PRIVATE_KEY_PATH} | awk '{print $2}') >> _env
+        fi
         echo 'Edit the _env file to configure your WordPress envrionment'
+    else
+        echo 'exiting _env file found, exiting.'
+        echo
     fi
 }
 
 # ---------------------------------------------------
 # parse arguments
 
-while getopts "f:p:h" optchar; do
+while getopts "f:p:k:h" optchar; do
     case "${optchar}" in
         f) export COMPOSE_FILE=${OPTARG} ;;
         p) export COMPOSE_PROJECT_NAME=${OPTARG} ;;
+        k) export MANTA_PRIVATE_KEY_PATH=${OPTARG}
+           ;;
     esac
 done
 shift $(expr $OPTIND - 1 )
+
+if [ -z "$MANTA_PRIVATE_KEY_PATH" ]
+then
+  help
+  exit
+fi
 
 until
     cmd=$1

@@ -11,7 +11,7 @@ wordpress:
 
 # NFS is used to store user uploads
 nfs:
-  image: autopilotpattern/nfsserver
+  image: autopilotpattern/nfsserver:latest
   restart: always
   mem_limit: 256m
   env_file: _env

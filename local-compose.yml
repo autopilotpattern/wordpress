@@ -2,15 +2,13 @@ wordpress:
   extends:
     file: docker-compose.yml
     service: wordpress
-  privileged: true
   build: .
-  links:
-    - consul:consul
-    - nfs:nfs
+  privileged: true
+  restart: never
   environment:
     - CONSUL=consul
-  mem_limit: 512m
-  restart: never
+  links:
+    - consul:consul
   ports:
     - "80"
 
@@ -19,6 +17,7 @@ nfs:
     file: docker-compose.yml
     service: nfs
   privileged: true
+  restart: never
   environment:
     - CONSUL=consul
   links:
@@ -32,13 +31,11 @@ mysql:
   extends:
     file: docker-compose.yml
     service: mysql
-  build: nginx/
   restart: never
-  links:
-    - consul:consul
   environment:
     - CONSUL=consul
-    - CONTAINERPILOT=file:///etc/containerpilot.json
+  links:
+    - consul:consul
   ports:
     - 3306
 
@@ -46,30 +43,30 @@ memcached:
   extends:
     file: docker-compose.yml
     service: memcached
-  links:
-    - consul:consul
+  restart: never
   environment:
     - CONSUL=consul
-  restart: never
+  links:
+    - consul:consul
 
 # Nginx as a load-balancing tier and reverse proxy
 nginx:
   extends:
     file: docker-compose.yml
     service: nginx
-  ports:
-  - 80:80
-  links:
-    - consul:consul
+  build: nginx/
+  restart: never
   environment:
     - CONSUL=consul
+  links:
+    - consul:consul
+  ports:
+    - 80:80
 
 consul:
   extends:
     file: docker-compose.yml
     service: consul
   restart: never
-  environment:
-    - CONSUL=consul
   ports:
-  - 8500:8500
+    - 8500:8500

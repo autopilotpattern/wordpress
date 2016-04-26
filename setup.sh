@@ -1,27 +1,21 @@
 #!/bin/bash
-set -e
+set -e -o pipefail
 
 help() {
-    echo 'Usage ./setup.sh [-k /path/to/private/key] [-f docker-compose.yml] [-p project]'
+    echo
+    echo 'Usage ./setup.sh ~/path/to/MANTA_PRIVATE_KEY'
     echo
     echo 'Checks that your Triton and Docker environment is sane and configures'
     echo 'an environment file to use.'
     echo
-    echo 'Required flags:'
-    echo '  -k /path/to/private/key    path to the private key used to access Manta'
+    echo 'MANTA_PRIVATE_KEY is the filesystem path to an SSH private key'
+    echo 'used to connect to Manta for the database backups.'
     echo
-    echo 'Optional flags:'
-    echo '  -f <filename>              use this file as the docker-compose config file'
-    echo '  -p <project>               use this name as the project prefix for docker-compose'
+    echo 'Additional details must be configured in the _env file, but this script will properly'
+    echo 'encode the SSH key details for use with this this project.'
+    echo
 }
 
-
-# default values which can be overriden by -f or -p flags
-export COMPOSE_PROJECT_NAME=wordpress
-export COMPOSE_FILE=
-
-# give the docker remote api more time before timeout
-export COMPOSE_HTTP_TIMEOUT=300
 
 # populated by `check` function whenever we're using Triton
 TRITON_USER=
@@ -29,11 +23,33 @@ TRITON_DC=
 TRITON_ACCOUNT=
 
 # ---------------------------------------------------
-# Top-level commmands
+# Top-level commands
 
+# Check for correct configuration and setup _env file
+envcheck() {
 
-# Check for correct configuration
-check() {
+    if [ -z "$1" ]; then
+        tput rev  # reverse
+        tput bold # bold
+        echo 'Please provide a path to a SSH private key to access Manta.'
+        tput sgr0 # clear
+
+        help
+        exit 1
+    fi
+
+    if [ ! -f "$1" ]; then
+        tput rev  # reverse
+        tput bold # bold
+        echo 'SSH private key for Manta is unreadable.'
+        tput sgr0 # clear
+
+        help
+        exit 1
+    fi
+
+    # Assign args to named vars
+    MANTA_PRIVATE_KEY_PATH=$1
 
     command -v docker >/dev/null 2>&1 || {
         echo
@@ -53,11 +69,6 @@ check() {
         echo 'See https://apidocs.joyent.com/cloudapi/#getting-started'
         exit 1
     }
-
-    # if we're not testing on Triton, don't bother checking Triton config
-    if [ ! -z "${COMPOSE_FILE}" ]; then
-        exit 0
-    fi
 
     command -v triton >/dev/null 2>&1 || {
         echo
@@ -100,58 +111,94 @@ check() {
         exit 1
     fi
 
+    # setup environment file
     if [ ! -f "_env" ]; then
-        echo "Creating a configuration file..."
-        cp _env.example _env
-        echo >> _env
-        echo MANTA_PRIVATE_KEY=$(cat ${MANTA_PRIVATE_KEY_PATH} | tr '\n' '#') >> _env
+        echo '# Environment variables for for WordPress site' > _env
+        echo '# please include the scheme http:// or https:// in the URL variable' >> _env
 
-        ssh-keygen -yl -E md5 -f ${MANTA_PRIVATE_KEY_PATH} > /dev/null 2>&1
-        if [ $? -eq 0 ]
-        then
-          echo MANTA_KEY_ID=$(ssh-keygen -yl -E md5 -f ${MANTA_PRIVATE_KEY_PATH} | awk '{print substr($2,5)}') >> _env
-        else
-          echo MANTA_KEY_ID=$(ssh-keygen -yl -f ${MANTA_PRIVATE_KEY_PATH} | awk '{print $2}') >> _env
-        fi
-        echo 'Edit the _env file to configure your WordPress envrionment'
+        echo 'WORDPRESS_URL=http://'wordpress.svc.${TRITON_ACCOUNT}.${TRITON_DC}.cns.triton.zone >> _env
+        echo 'WORDPRESS_SITE_TITLE=Autopilot Pattern WordPress test site' >> _env
+        echo 'WORDPRESS_ADMIN_EMAIL=user@example.net' >> _env
+        echo 'WORDPRESS_ADMIN_USER=username' >> _env
+        echo 'WORDPRESS_ADMIN_PASSWORD='$(cat /dev/urandom | LC_ALL=C tr -dc 'a-z0-9' | head -c 11) >> _env
+        echo 'WORDPRESS_ACTIVE_THEME=theme' >> _env
+        echo 'WORDPRESS_CACHE_KEY_SALT='$(cat /dev/urandom | LC_ALL=C tr -dc 'a-z0-9' | head -c 53) >> _env
+        echo '#WORDPRESS_TEST_DATA=false # uncomment to import a collection of test content on start' >> _env
+        echo >> _env
+
+        echo '# Wordpress security salts' >> _env
+        echo '# These must be unique for your install to ensure the security of the site' >> _env
+        echo 'WORDPRESS_AUTH_KEY='$(cat /dev/urandom | LC_ALL=C tr -dc 'a-z0-9' | head -c 53) >> _env
+        echo 'WORDPRESS_SECURE_AUTH_KEY='$(cat /dev/urandom | LC_ALL=C tr -dc 'a-z0-9' | head -c 53) >> _env
+        echo 'WORDPRESS_LOGGED_IN_KEY='$(cat /dev/urandom | LC_ALL=C tr -dc 'a-z0-9' | head -c 53) >> _env
+        echo 'WORDPRESS_NONCE_KEY='$(cat /dev/urandom | LC_ALL=C tr -dc 'a-z0-9' | head -c 53) >> _env
+        echo 'WORDPRESS_AUTH_SALT='$(cat /dev/urandom | LC_ALL=C tr -dc 'a-z0-9' | head -c 53) >> _env
+        echo 'WORDPRESS_SECURE_AUTH_SALT='$(cat /dev/urandom | LC_ALL=C tr -dc 'a-z0-9' | head -c 53) >> _env
+        echo 'WORDPRESS_LOGGED_IN_SALT='$(cat /dev/urandom | LC_ALL=C tr -dc 'a-z0-9' | head -c 53) >> _env
+        echo 'WORDPRESS_NONCE_SALT='$(cat /dev/urandom | LC_ALL=C tr -dc 'a-z0-9' | head -c 53) >> _env
+        echo >> _env
+
+        echo '# Environment variables for MySQL service' >> _env
+        echo '# WordPress database/WPDB information' >> _env
+        echo 'MYSQL_USER=wpdbuser' >> _env
+        echo 'MYSQL_PASSWORD='$(cat /dev/urandom | LC_ALL=C tr -dc 'a-z0-9' | head -c 7) >> _env
+        echo 'MYSQL_DATABASE=wp' >> _env
+        echo '# MySQL replication user, should be different from above' >> _env
+        echo 'MYSQL_REPL_USER=repluser' >> _env
+        echo 'MYSQL_REPL_PASSWORD='$(cat /dev/urandom | LC_ALL=C tr -dc 'a-z0-9' | head -c 7) >> _env
+        echo >> _env
+
+        echo '# Environment variables for backups to Manta' >> _env
+        echo 'MANTA_BUCKET= # an existing Manta bucket' >> _env
+        echo 'MANTA_USER= # a user with access to that bucket' >> _env
+        echo 'MANTA_SUBUSER=' >> _env
+        echo 'MANTA_ROLE=' >> _env
+        echo 'MANTA_URL=https://us-east.manta.joyent.com' >> _env
+
+        # MANTA_KEY_ID must be the md5 formatted key fingerprint. A SHA256 will result in errors.
+        echo MANTA_KEY_ID=$(ssh-keygen -yl -E md5 -f ${MANTA_PRIVATE_KEY_PATH} | awk '{print substr($2,5)}') >> _env
+
+        # munge the private key so that we can pass it into an env var sanely
+        # and then unmunge it in our startup script
+        echo MANTA_PRIVATE_KEY=$(cat ${MANTA_PRIVATE_KEY_PATH} | tr '\n' '#') >> _env
+        echo >> _env
+
+        echo '# Consul discovery via Triton CNS' >> _env
+        echo CONSUL=consul.svc.${TRITON_ACCOUNT}.${TRITON_DC}.cns.joyent.com >> _env
+        echo >> _env
+
+        echo 'Edit the _env file to confirm and set your desired configuration details'
     else
-        echo 'exiting _env file found, exiting.'
-        echo
+        echo 'Existing _env file found, exiting'
+        exit
     fi
 }
 
 # ---------------------------------------------------
 # parse arguments
 
-while getopts "f:p:k:h" optchar; do
-    case "${optchar}" in
-        f) export COMPOSE_FILE=${OPTARG} ;;
-        p) export COMPOSE_PROJECT_NAME=${OPTARG} ;;
-        k) export MANTA_PRIVATE_KEY_PATH=${OPTARG}
-           ;;
-    esac
-done
-shift $(expr $OPTIND - 1 )
-
-if [ -z "$MANTA_PRIVATE_KEY_PATH" ]
-then
-  help
-  exit
-fi
+# Get function list
+funcs=($(declare -F -p | cut -d " " -f 3))
 
 until
-    cmd=$1
-    if [ ! -z "$cmd" ]; then
-        shift 1
+    if [ ! -z "$1" ]; then
+        # check if the first arg is a function in this file, or use a default
+        if [[ " ${funcs[@]} " =~ " $1 " ]]; then
+            cmd=$1
+            shift 1
+        else
+            cmd="envcheck"
+        fi
+
         $cmd "$@"
         if [ $? == 127 ]; then
             help
         fi
+
         exit
+    else
+        help
     fi
 do
     echo
 done
-
-# default behavior
-check

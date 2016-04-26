@@ -119,7 +119,7 @@ envcheck() {
         echo 'WORDPRESS_URL=http://'wordpress.svc.${TRITON_ACCOUNT}.${TRITON_DC}.triton.zone >> _env
         echo 'WORDPRESS_SITE_TITLE=Autopilot Pattern WordPress test site' >> _env
         echo 'WORDPRESS_ADMIN_EMAIL=user@example.net' >> _env
-        echo 'WORDPRESS_ADMIN_USER=username' >> _env
+        echo 'WORDPRESS_ADMIN_USER=admin-'$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 3) >> _env
         echo 'WORDPRESS_ADMIN_PASSWORD='$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 11) >> _env
         echo 'WORDPRESS_ACTIVE_THEME=theme' >> _env
         echo 'WORDPRESS_CACHE_KEY_SALT='$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 53) >> _env

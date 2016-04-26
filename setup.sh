@@ -116,36 +116,36 @@ envcheck() {
         echo '# Environment variables for for WordPress site' > _env
         echo '# please include the scheme http:// or https:// in the URL variable' >> _env
 
-        echo 'WORDPRESS_URL=http://'wordpress.svc.${TRITON_ACCOUNT}.${TRITON_DC}.cns.triton.zone >> _env
+        echo 'WORDPRESS_URL=http://'wordpress.svc.${TRITON_ACCOUNT}.${TRITON_DC}.triton.zone >> _env
         echo 'WORDPRESS_SITE_TITLE=Autopilot Pattern WordPress test site' >> _env
         echo 'WORDPRESS_ADMIN_EMAIL=user@example.net' >> _env
         echo 'WORDPRESS_ADMIN_USER=username' >> _env
-        echo 'WORDPRESS_ADMIN_PASSWORD='$(cat /dev/urandom | LC_ALL=C tr -dc 'a-z0-9' | head -c 11) >> _env
+        echo 'WORDPRESS_ADMIN_PASSWORD='$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 11) >> _env
         echo 'WORDPRESS_ACTIVE_THEME=theme' >> _env
-        echo 'WORDPRESS_CACHE_KEY_SALT='$(cat /dev/urandom | LC_ALL=C tr -dc 'a-z0-9' | head -c 53) >> _env
+        echo 'WORDPRESS_CACHE_KEY_SALT='$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 53) >> _env
         echo '#WORDPRESS_TEST_DATA=false # uncomment to import a collection of test content on start' >> _env
         echo >> _env
 
         echo '# Wordpress security salts' >> _env
         echo '# These must be unique for your install to ensure the security of the site' >> _env
-        echo 'WORDPRESS_AUTH_KEY='$(cat /dev/urandom | LC_ALL=C tr -dc 'a-z0-9' | head -c 53) >> _env
-        echo 'WORDPRESS_SECURE_AUTH_KEY='$(cat /dev/urandom | LC_ALL=C tr -dc 'a-z0-9' | head -c 53) >> _env
-        echo 'WORDPRESS_LOGGED_IN_KEY='$(cat /dev/urandom | LC_ALL=C tr -dc 'a-z0-9' | head -c 53) >> _env
-        echo 'WORDPRESS_NONCE_KEY='$(cat /dev/urandom | LC_ALL=C tr -dc 'a-z0-9' | head -c 53) >> _env
-        echo 'WORDPRESS_AUTH_SALT='$(cat /dev/urandom | LC_ALL=C tr -dc 'a-z0-9' | head -c 53) >> _env
-        echo 'WORDPRESS_SECURE_AUTH_SALT='$(cat /dev/urandom | LC_ALL=C tr -dc 'a-z0-9' | head -c 53) >> _env
-        echo 'WORDPRESS_LOGGED_IN_SALT='$(cat /dev/urandom | LC_ALL=C tr -dc 'a-z0-9' | head -c 53) >> _env
-        echo 'WORDPRESS_NONCE_SALT='$(cat /dev/urandom | LC_ALL=C tr -dc 'a-z0-9' | head -c 53) >> _env
+        echo 'WORDPRESS_AUTH_KEY='$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 53) >> _env
+        echo 'WORDPRESS_SECURE_AUTH_KEY='$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 53) >> _env
+        echo 'WORDPRESS_LOGGED_IN_KEY='$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 53) >> _env
+        echo 'WORDPRESS_NONCE_KEY='$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 53) >> _env
+        echo 'WORDPRESS_AUTH_SALT='$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 53) >> _env
+        echo 'WORDPRESS_SECURE_AUTH_SALT='$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 53) >> _env
+        echo 'WORDPRESS_LOGGED_IN_SALT='$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 53) >> _env
+        echo 'WORDPRESS_NONCE_SALT='$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 53) >> _env
         echo >> _env
 
         echo '# Environment variables for MySQL service' >> _env
         echo '# WordPress database/WPDB information' >> _env
         echo 'MYSQL_USER=wpdbuser' >> _env
-        echo 'MYSQL_PASSWORD='$(cat /dev/urandom | LC_ALL=C tr -dc 'a-z0-9' | head -c 7) >> _env
+        echo 'MYSQL_PASSWORD='$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 7) >> _env
         echo 'MYSQL_DATABASE=wp' >> _env
         echo '# MySQL replication user, should be different from above' >> _env
         echo 'MYSQL_REPL_USER=repluser' >> _env
-        echo 'MYSQL_REPL_PASSWORD='$(cat /dev/urandom | LC_ALL=C tr -dc 'a-z0-9' | head -c 7) >> _env
+        echo 'MYSQL_REPL_PASSWORD='$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 7) >> _env
         echo >> _env
 
         echo '# Environment variables for backups to Manta' >> _env
@@ -157,6 +157,8 @@ envcheck() {
 
         # MANTA_KEY_ID must be the md5 formatted key fingerprint. A SHA256 will result in errors.
         set +o pipefail
+        # The -E option was added to ssh-keygen recently; if it doesn't work, then
+        # assume we're using an older version of ssh-keygen that only outputs MD5 fingerprints
         ssh-keygen -yl -E md5 -f ${MANTA_PRIVATE_KEY_PATH} > /dev/null 2>&1
         if [ $? -eq 0 ]; then
             echo MANTA_KEY_ID=$(ssh-keygen -yl -E md5 -f ${MANTA_PRIVATE_KEY_PATH} | awk '{print substr($2,5)}') >> _env

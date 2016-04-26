@@ -1,75 +1,68 @@
+# An demo version of WordPress for easy scaling
 wordpress:
-  build: .
-  privileged: true
-  env_file: _env
-  environment:
-    - CONTAINERBUDDY=file:///etc/containerbuddy.json
+  image: autopilotpattern/wordpress:latest
   restart: always
   mem_limit: 1g
-  labels:
-    - triton.cns.services=wordpress
+  env_file: _env
   ports:
     - 80
+  labels:
+    - triton.cns.services=wordpress
 
+# NFS is used to store user uploads
 nfs:
   image: autopilotpattern/nfsserver
-  privileged: true
-  env_file: _env
-  mem_limit: 256m
   restart: always
-  labels:
-    - triton.cns.services=nfs
+  mem_limit: 256m
+  env_file: _env
   expose:
     - 111
     - 1892
     - 2049
+  labels:
+    - triton.cns.services=nfs
 
+# The MySQL database will automatically cluster and scale
+# see https://www.joyent.com/blog/dbaas-simplicity-no-lock-in
 mysql:
   image: autopilotpattern/mysql:latest
+  restart: always
   mem_limit: 4g
   env_file: _env
-  restart: always
-  labels:
-    - triton.cns.services=mysql
   expose:
     - 3306
+  labels:
+    - triton.cns.services=mysql
 
+# Memcached is a high performance object cache
 memcached:
   image: autopilotpattern/memcached:latest
+  restart: always
   mem_limit: 512m
   env_file: _env
-  environment:
-    - CONTAINERBUDDY=file:///etc/containerbuddy.json
   ports:
     - 11211
   labels:
     - triton.cns.services=memcached
-  restart: always
 
 # Nginx as a load-balancing tier and reverse proxy
 nginx:
-  build: nginx/
+  image: autopilotpattern/wordpress-nginx:latest
+  restart: always
   mem_limit: 512m
   ports:
-  - 80
+    - 80
   env_file: _env
-  environment:
-    - NGINX_CONF=/etc/nginx.conf.ctmpl
-    - CONTAINERPILOT=file:///etc/containerpilot.json
-  command: >
-    /usr/local/bin/containerpilot
-    nginx -g "daemon off;"
-  restart: always
-  ports:
-  - "80"
   labels:
     - triton.cns.services=nginx
 
+# Consul is the service catalog that helps discovery between the components
 consul:
   image: progrium/consul:latest
   command: -server -bootstrap -ui-dir /ui
-  env_file: _env
+  restart: always
   mem_limit: 128m
+  env_file: _env
   ports:
     - 8500
   expose:
@@ -81,6 +74,5 @@ consul:
     - 8500
   dns:
     - 127.0.0.1
-  restart: always
   labels:
     - triton.cns.services=consul

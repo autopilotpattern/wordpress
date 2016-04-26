@@ -123,7 +123,7 @@ envcheck() {
         echo 'WORDPRESS_ADMIN_PASSWORD='$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 11) >> _env
         echo 'WORDPRESS_ACTIVE_THEME=theme' >> _env
         echo 'WORDPRESS_CACHE_KEY_SALT='$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 53) >> _env
-        echo '#WORDPRESS_TEST_DATA=false # uncomment to import a collection of test content on start' >> _env
+        echo '#WORDPRESS_TEST_DATA=true # uncomment to import a collection of test content on start' >> _env
         echo >> _env
 
         echo '# Wordpress security salts' >> _env
@@ -149,11 +149,11 @@ envcheck() {
         echo >> _env
 
         echo '# Environment variables for backups to Manta' >> _env
+        echo 'MANTA_URL=https://us-east.manta.joyent.com' >> _env
         echo 'MANTA_BUCKET= # an existing Manta bucket' >> _env
         echo 'MANTA_USER= # a user with access to that bucket' >> _env
         echo 'MANTA_SUBUSER=' >> _env
         echo 'MANTA_ROLE=' >> _env
-        echo 'MANTA_URL=https://us-east.manta.joyent.com' >> _env
 
         # MANTA_KEY_ID must be the md5 formatted key fingerprint. A SHA256 will result in errors.
         set +o pipefail

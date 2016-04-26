@@ -121,7 +121,7 @@ envcheck() {
         echo 'WORDPRESS_ADMIN_EMAIL=user@example.net' >> _env
         echo 'WORDPRESS_ADMIN_USER=admin-'$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 3) >> _env
         echo 'WORDPRESS_ADMIN_PASSWORD='$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 11) >> _env
-        echo 'WORDPRESS_ACTIVE_THEME=theme' >> _env
+        echo 'WORDPRESS_ACTIVE_THEME=twentysixteen' >> _env
         echo 'WORDPRESS_CACHE_KEY_SALT='$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 53) >> _env
         echo '#WORDPRESS_TEST_DATA=true # uncomment to import a collection of test content on start' >> _env
         echo >> _env

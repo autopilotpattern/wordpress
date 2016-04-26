@@ -156,7 +156,14 @@ envcheck() {
         echo 'MANTA_URL=https://us-east.manta.joyent.com' >> _env
 
         # MANTA_KEY_ID must be the md5 formatted key fingerprint. A SHA256 will result in errors.
-        echo MANTA_KEY_ID=$(ssh-keygen -yl -E md5 -f ${MANTA_PRIVATE_KEY_PATH} | awk '{print substr($2,5)}') >> _env
+        set +o pipefail
+        ssh-keygen -yl -E md5 -f ${MANTA_PRIVATE_KEY_PATH} > /dev/null 2>&1
+        if [ $? -eq 0 ]; then
+            echo MANTA_KEY_ID=$(ssh-keygen -yl -E md5 -f ${MANTA_PRIVATE_KEY_PATH} | awk '{print substr($2,5)}') >> _env
+        else
+            echo MANTA_KEY_ID=$(ssh-keygen -yl -f ${MANTA_PRIVATE_KEY_PATH} | awk '{print $2}') >> _env
+        fi
+        set -o pipefail
 
         # munge the private key so that we can pass it into an env var sanely
         # and then unmunge it in our startup script

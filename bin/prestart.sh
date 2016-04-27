@@ -52,7 +52,7 @@ else
     wp --allow-root theme activate $WORDPRESS_ACTIVE_THEME
   fi
 
-  if [[ $WORDPRESS_TEST_DATA=true ]]
+  if [ -n "$WORDPRESS_TEST_DATA" ]
   then
     echo "installing WP test content"
     wp --allow-root plugin install wordpress-importer --activate

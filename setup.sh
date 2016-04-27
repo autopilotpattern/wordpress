@@ -116,7 +116,7 @@ envcheck() {
         echo '# Environment variables for for WordPress site' > _env
         echo '# please include the scheme http:// or https:// in the URL variable' >> _env
 
-        echo 'WORDPRESS_URL=http://'wordpress.svc.${TRITON_ACCOUNT}.${TRITON_DC}.triton.zone >> _env
+        echo 'WORDPRESS_URL=http://'nginx.svc.${TRITON_ACCOUNT}.${TRITON_DC}.triton.zone >> _env
         echo 'WORDPRESS_SITE_TITLE=Autopilot Pattern WordPress test site' >> _env
         echo 'WORDPRESS_ADMIN_EMAIL=user@example.net' >> _env
         echo 'WORDPRESS_ADMIN_USER=admin-'$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 3) >> _env

@@ -47,7 +47,7 @@ else
   # set a nice default permalink structure
   wp --allow-root option update permalink_structure '/%year%/%monthnum%/%postname%/'
   # set theme
-  if [ -n $WORDPRESS_ACTIVE_THEME ]
+  if [ -n "$WORDPRESS_ACTIVE_THEME" ]
   then
     wp --allow-root theme activate $WORDPRESS_ACTIVE_THEME
   fi

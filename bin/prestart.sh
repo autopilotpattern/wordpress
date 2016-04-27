@@ -47,18 +47,19 @@ else
   # set a nice default permalink structure
   wp --allow-root option update permalink_structure '/%year%/%monthnum%/%postname%/'
   # set theme
-  if [ $WORDPRESS_ACTIVE_THEME ]
+  if [ -n $WORDPRESS_ACTIVE_THEME ]
   then
     wp --allow-root theme activate $WORDPRESS_ACTIVE_THEME
   fi
 
-  if [ $WORDPRESS_TEST_DATA ]
+  if [[ $WORDPRESS_TEST_DATA=true ]]
   then
     echo "installing WP test content"
     wp --allow-root plugin install wordpress-importer --activate
     curl -OL https://raw.githubusercontent.com/manovotny/wptest/master/wptest.xml
     wp --allow-root import wptest.xml --authors=create
     wp --allow-root plugin uninstall wordpress-importer --deactivate
+    chown www-data:www-data /var/www/html/wordpress/content/uploads/*
     rm wptest.xml
   fi
 fi

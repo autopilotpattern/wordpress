@@ -17,12 +17,12 @@ This project uses the Autopilot Pattern to automate operations, including discov
 
 A running cluster includes the following components:
 
-- [ContainerPilot](https://www.joyent.com/containerpilot): included in our MySQL containers orchestrate bootstrap behavior and coordinate replication using keys and checks stored in Consul in the `preStart`, `health`, and `onChange` handlers.
+- [ContainerPilot](https://www.joyent.com/containerpilot): included in our MySQL containers to orchestrate bootstrap behavior and coordinate replication using keys and checks stored in Consul in the `preStart`, `health`, and `onChange` handlers.
 - [MySQL](https://github.com/autopilotpattern/mysql/): we're using the [Autopilot Pattern implementation of MySQL](https://www.joyent.com/blog/dbaas-simplicity-no-lock-in) for automatic backups and self-clustering so that we can deploy and scale easily
 - [HyperDB](https://wordpress.org/plugins/hyperdb/): an "advanced database class that replaces a few of the WordPress built-in database functions" to support the MySQL cluster that's necessary for scaling WordPress; everything is automatically configured so running a scalable WordPress site is no more complex than running without the scaling features
 - [Memcached](https://github.com/autpilotpattern/memcached/): improves performance by keeping frequently accessed data in memory so WordPress doesn't have to query the database for every request; the images include [tollmanz's Memcached plugin](https://github.com/tollmanz/wordpress-pecl-memcached-object-cache) pre-installed, and ContainerPilot automatically configures it as we scale
 - [Nginx](https://github.com/autopilotpattern/nginx): the front-end load balancer for the WordPress environment; passes traffic from users to the WordPress containers on the back-end
-- [NFS](https://github.com/autpilotpattern/nfsserver/): stores user uploaded files so these files can be shared between many WordPress containers; alternatively, a
+- [NFS](https://github.com/autpilotpattern/nfsserver/): stores user uploaded files so these files can be shared between many WordPress containers
 - [Consul](https://www.consul.io/): used to coordinate replication and failover
 - [Manta](https://www.joyent.com/object-storage): the Joyent object store, for securely and durably storing our MySQL snapshots
 - [WP-CLI](http://wp-cli.org/): to make managing WordPress easier

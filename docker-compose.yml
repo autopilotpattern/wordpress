@@ -1,0 +1,78 @@
+# An demo version of WordPress for easy scaling
+wordpress:
+  image: autopilotpattern/wordpress:latest
+  restart: always
+  mem_limit: 1g
+  env_file: _env
+  ports:
+    - 80
+  labels:
+    - triton.cns.services=wordpress
+
+# NFS is used to store user uploads
+nfs:
+  image: autopilotpattern/nfsserver:latest
+  restart: always
+  mem_limit: 256m
+  env_file: _env
+  expose:
+    - 111
+    - 1892
+    - 2049
+  labels:
+    - triton.cns.services=nfs
+
+# The MySQL database will automatically cluster and scale
+# see https://www.joyent.com/blog/dbaas-simplicity-no-lock-in
+mysql:
+  image: autopilotpattern/mysql:latest
+  restart: always
+  mem_limit: 4g
+  env_file: _env
+  expose:
+    - 3306
+  labels:
+    - triton.cns.services=mysql
+
+# Memcached is a high performance object cache
+memcached:
+  image: autopilotpattern/memcached:latest
+  restart: always
+  mem_limit: 512m
+  env_file: _env
+  ports:
+    - 11211
+  labels:
+    - triton.cns.services=memcached
+
+# Nginx as a load-balancing tier and reverse proxy
+nginx:
+  image: autopilotpattern/wordpress-nginx:latest
+  restart: always
+  mem_limit: 512m
+  ports:
+    - 80
+  env_file: _env
+  labels:
+    - triton.cns.services=nginx
+
+# Consul is the service catalog that helps discovery between the components
+consul:
+  image: progrium/consul:latest
+  command: -server -bootstrap -ui-dir /ui
+  restart: always
+  mem_limit: 128m
+  env_file: _env
+  ports:
+    - 8500
+  expose:
+    - 53
+    - 8300
+    - 8301
+    - 8302
+    - 8400
+    - 8500
+  dns:
+    - 127.0.0.1
+  labels:
+    - triton.cns.services=consul

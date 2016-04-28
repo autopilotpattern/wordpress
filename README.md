@@ -13,7 +13,7 @@
 
 This project uses the Autopilot Pattern to automate operations, including discovery and configuration, for easy scaling to any size. All component containers use [ContainerPilot](https://www.joyent.com/containerpilot) and [Consul](https://consul.io/) to configure themselves. This also allows each service to be scaled independently to handle incoming traffic and as more services are added, the containers that consume these services will reconfigure themselves accordingly.
 
-### Project Architecture
+### Project architecture
 
 A running cluster includes the following components:
 
@@ -51,7 +51,7 @@ curl -O https://raw.githubusercontent.com/joyent/sdc-docker/master/tools/sdc-doc
 
 Check that everything is configured correctly by running `./setup.sh`. You'll need an SSH key that has access to Manta, the object store where the MySQL backups are stored. Pass the path of that SSH key as `./setup.sh ~/path/to/MANTA_SSH_KEY`. The script will create an `_env` file that names the variables that you will need to run your WordPress environment.
 
-#### Manta Settings
+#### Manta settings
 
 The script will set defaults for almost every config variable, but the Manta config is required and must be set manually. The two most important variables there are:
 

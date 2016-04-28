@@ -88,6 +88,8 @@ If you are not bringing your own theme in this repo, you can choose from these d
 
 The script will set a `WORDPRESS_URL` value for Triton users using [Container Name Service](https://www.joyent.com/blog/introducing-triton-container-name-service) that will make it easy to test the containers without setting any DNS information. You can [`CNAME` your site DNS](https://www.joyent.com/blog/introducing-triton-container-name-service#example-global-dns) to that to make it easy to scale and replace the Nginx containers at the front of your site without ever needing to update the DNS configuration.
 
+Setting `WORDPRESS_TEST_DATA` will download the [manovotny/wptest](https://github.com/manovotny/wptest) content library when the WordPress container starts.
+
 #### MySQL settings
 
 The setup script will set default values for the MySQL configuration, including randomly generated passwords.
@@ -134,17 +136,17 @@ CONSUL=<IP or DNS to Consul>
 
 For local development, we use Docker links and simply set this to `CONSUL=consul`, but on Triton we use [Container Name Service](https://www.joyent.com/blog/introducing-triton-container-name-service) so that we can have a raft of Consul instances operating as a highly available service ([see example](https://www.joyent.com/blog/introducing-triton-container-name-service#example-consul-bootstrapping)).
 
-#### A note on Nginx
+### A note on Nginx
 
 This project also builds it's own Nginx container that is based on the [AutoPilot Pattern Nginx](https://github.com/autopilotpattern/nginx). We build a custom Nginx container to more easily inject our custom configurations. The configs located in the `/nginx` directory should work well for most use cases of this project, but they can be customized and baked into the Nginx image if the need arises.
 
-#### Start the containers!
+### Start the containers!
 
 After configuring everything, we are now ready to start the containers. To do that simply execute `docker-compose up -d` to spin everything up on Triton. Open your browser to the `WORDPRESS_URL` and enjoy your new site!
 
 For local development, use `docker-compose -f local-compose.yml up -d`.
 
-#### Going big
+### Going big
 
 To scale, use `docker-compose scale...`. For example, the following will set the scale of the WordPress, Memcached, Nginx, and MySQL services to three instances each:
 
@@ -155,6 +157,18 @@ docker-compose scale wordpress=3 memcached=3 nginx=3 mysql=3
 If there are few instances running for any of those services, more will be added to meet the specified count. As you scale, the application will automatically reconfigure itself so that everything is connected. All the Nginx instances will connect to all the WordPress instances, and those will connect to all the Memcached and MySQL instances. If an instance should unexpectedly crash, the other instances will automatically reconfigure to re-route requests around the failed instance.
 
 To scale back down, simply run `docker-compose scale...` and specify a smaller number of instances.
+
+### Compatibility
+
+This project has been fully tested and documented to run in Docker in local development environments and on [Joyent Triton](https://www.joyent.com), however it has been demonstrated on, or is believe compatible with container environments including:
+
+- [Mantl](http://mantl.io)
+- [DC/OS](https://dcos.io)
+- [Docker Swarm](https://www.docker.com/products/docker-swarm)
+- [Kubernetes](http://kubernetes.io)
+- Others
+
+Discussion about support for these and other container platforms is welcome on [Gitter](https://gitter.im/autopilotpattern/general).
 
 ### Sponsors
 

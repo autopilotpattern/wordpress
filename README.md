@@ -170,6 +170,12 @@ This project has been fully tested and documented to run in Docker in local deve
 
 Discussion about support for these and other container platforms is welcome on [Gitter](https://gitter.im/autopilotpattern/general).
 
+### Contributing
+
+- Please [report bugs in Github](https://github.com/autopilotpattern/wordpress/issues) (and check the bug list for known bugs)
+- Join us in [Gitter](https://gitter.im/autopilotpattern/general) to discuss features
+- It's open source, [pull requests welcome](https://github.com/autopilotpattern/wordpress/pulls)!
+
 ### Sponsors
 
 Initial development of this project was sponsored by [Joyent](https://www.joyent.com) and [10up](http://10up.com).

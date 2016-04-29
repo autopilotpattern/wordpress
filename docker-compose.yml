@@ -53,6 +53,7 @@ nginx:
   mem_limit: 512m
   ports:
     - 80
+    - 9090
   env_file: _env
   labels:
     - triton.cns.services=nginx

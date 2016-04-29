@@ -59,7 +59,7 @@ else
     curl -OL https://raw.githubusercontent.com/manovotny/wptest/master/wptest.xml
     wp --allow-root import wptest.xml --authors=create
     wp --allow-root plugin uninstall wordpress-importer --deactivate
-    chown -R www-data:www-data /var/www/html/wordpress/content/uploads/*
+    chown -R www-data:www-data /var/www/html/content/uploads/*
     rm wptest.xml
   fi
 fi

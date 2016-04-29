@@ -2,7 +2,7 @@
 wordpress:
   image: autopilotpattern/wordpress:latest
   restart: always
-  mem_limit: 2g
+  mem_limit: 1g
   env_file: _env
   ports:
     - 80

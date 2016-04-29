@@ -67,7 +67,7 @@ COPY /var/www/html /var/www/html
 RUN chown -R www-data:www-data /var/www/html/*
 
 # Install WordPress via wp-cli & move the default themes to our content dir
-ENV WORDPRESS_VERSION 4.5
+ENV WORDPRESS_VERSION 4.5.1
 RUN wp --allow-root core download --version=${WORDPRESS_VERSION} \
     && mv /var/www/html/wordpress/wp-content/themes/* /var/www/html/content/themes/
 

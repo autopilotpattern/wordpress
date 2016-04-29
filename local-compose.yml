@@ -11,6 +11,7 @@ wordpress:
     - consul:consul
   ports:
     - "80"
+    - "9090"
 
 nfs:
   extends:

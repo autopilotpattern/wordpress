@@ -2,10 +2,11 @@
 wordpress:
   image: autopilotpattern/wordpress:latest
   restart: always
-  mem_limit: 1g
+  mem_limit: 2g
   env_file: _env
   ports:
     - 80
+    - 9090
   labels:
     - triton.cns.services=wordpress
 

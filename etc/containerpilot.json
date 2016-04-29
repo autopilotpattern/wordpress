@@ -36,5 +36,24 @@
       "poll": 5,
       "onChange": "/usr/local/bin/onchange-memcached.sh"
     }
-  ]
+  ],
+  "telemetry": {
+    "port": 9090,
+    "sensors": [
+      {
+        "name": "wp_memory_percent",
+        "help": "percentage of memory used",
+        "type": "gauge",
+        "poll": 5,
+        "check": ["/usr/local/bin/sensor.sh", "memory"]
+      },
+      {
+        "name": "wp_cpu_load",
+        "help": "cpu load",
+        "type": "gauge",
+        "poll": 5,
+        "check": ["/usr/local/bin/sensor.sh", "cpu"]
+      }
+    ]
+  }
 }

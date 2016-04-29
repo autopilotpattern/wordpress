@@ -6,6 +6,7 @@ wordpress:
   env_file: _env
   ports:
     - 80
+    - 9090
   labels:
     - triton.cns.services=wordpress
 

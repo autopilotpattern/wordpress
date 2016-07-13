@@ -5,7 +5,6 @@
 [![DockerPulls](https://img.shields.io/docker/pulls/autopilotpattern/wordpress.svg)](https://registry.hub.docker.com/u/autopilotpattern/wordpress/)
 [![DockerStars](https://img.shields.io/docker/stars/autopilotpattern/wordpress.svg)](https://registry.hub.docker.com/u/autopilotpattern/wordpress/)
 [![ImageLayers](https://badge.imagelayers.io/autopilotpattern/wordpress:latest.svg)](https://imagelayers.io/?images=autopilotpattern/wordpress:latest)
-[![Join the chat at https://gitter.im/autopilotpattern/general](https://badges.gitter.im/autopilotpattern/general.svg)](https://gitter.im/autopilotpattern/general)
 
 ---
 
@@ -168,12 +167,9 @@ This project has been fully tested and documented to run in Docker in local deve
 - [Kubernetes](http://kubernetes.io)
 - Others
 
-Discussion about support for these and other container platforms is welcome on [Gitter](https://gitter.im/autopilotpattern/general).
-
 ### Contributing
 
 - Please [report bugs in Github](https://github.com/autopilotpattern/wordpress/issues) (and check the bug list for known bugs)
-- Join us in [Gitter](https://gitter.im/autopilotpattern/general) to discuss features
 - It's open source, [pull requests welcome](https://github.com/autopilotpattern/wordpress/pulls)!
 
 ### Sponsors

@@ -4,7 +4,8 @@
 
 [![DockerPulls](https://img.shields.io/docker/pulls/autopilotpattern/wordpress.svg)](https://registry.hub.docker.com/u/autopilotpattern/wordpress/)
 [![DockerStars](https://img.shields.io/docker/stars/autopilotpattern/wordpress.svg)](https://registry.hub.docker.com/u/autopilotpattern/wordpress/)
-[![MicroBadger](https://images.microbadger.com/badges/version/autopilotpattern/wordpress.svg)](http://microbadger.com/#/images/autopilotpattern/wordpress)
+[![MicroBadger version](https://images.microbadger.com/badges/version/autopilotpattern/wordpress.svg)](http://microbadger.com/#/images/autopilotpattern/wordpress)
+[![MicroBadger commit](https://images.microbadger.com/badges/commit/autopilotpattern/wordpress.svg)](http://microbadger.com/#/images/autopilotpattern/wordpress)
 
 ---
 

@@ -4,8 +4,7 @@
 
 [![DockerPulls](https://img.shields.io/docker/pulls/autopilotpattern/wordpress.svg)](https://registry.hub.docker.com/u/autopilotpattern/wordpress/)
 [![DockerStars](https://img.shields.io/docker/stars/autopilotpattern/wordpress.svg)](https://registry.hub.docker.com/u/autopilotpattern/wordpress/)
-[![ImageLayers](https://badge.imagelayers.io/autopilotpattern/wordpress:latest.svg)](https://imagelayers.io/?images=autopilotpattern/wordpress:latest)
-
+[![](https://images.microbadger.com/badges/version/autopilotpattern/wordpress.svg)](http://microbadger.com/#/images/autopilotpattern/wordpress)
 ---
 
 ### Containerized and easily scalable

@@ -1,9 +1,11 @@
 # An demo version of WordPress for easy scaling
 wordpress:
-  image: autopilotpattern/wordpress:latest
+  image: autopilotpattern/wordpress:branch-microbadger
   restart: always
   mem_limit: 1g
   env_file: _env
+  environment:
+    - CONSUL_AGENT=1
   ports:
     - 80
     - 9090
@@ -62,6 +64,8 @@ nginx:
     - 80
     - 9090
   env_file: _env
+  environment:
+    - CONSUL_AGENT=1
   labels:
     - triton.cns.services=nginx
     - com.docker.swarm.affinities=["container!=~*nginx*"]

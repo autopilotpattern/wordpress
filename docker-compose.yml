@@ -1,6 +1,6 @@
 # An demo version of WordPress for easy scaling
 wordpress:
-  image: autopilotpattern/wordpress:branch-microbadger
+  image: autopilotpattern/wordpress:latest
   restart: always
   mem_limit: 1g
   env_file: _env
@@ -21,6 +21,8 @@ nfs:
   restart: always
   mem_limit: 256m
   env_file: _env
+  environment:
+    - CONSUL_AGENT=1
   expose:
     - 111
     - 1892
@@ -37,6 +39,8 @@ mysql:
   restart: always
   mem_limit: 4g
   env_file: _env
+  environment:
+    - CONSUL_AGENT=1
   expose:
     - 3306
   labels:
@@ -49,6 +53,8 @@ memcached:
   restart: always
   mem_limit: 512m
   env_file: _env
+  environment:
+    - CONSUL_AGENT=1
   ports:
     - 11211
   labels:

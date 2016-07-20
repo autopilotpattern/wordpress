@@ -70,8 +70,8 @@ RUN export CONSUL_VERSION=0.6.4 \
 
 # Install Consul template
 # Releases at https://releases.hashicorp.com/consul-template/
-RUN export CONSUL_TEMPLATE_VERSION 0.14.0 \
-    && export CONSUL_TEMPLATE_CHECKSUM 7c70ea5f230a70c809333e75fdcff2f6f1e838f29cfb872e1420a63cdf7f3a78 \
+RUN export CONSUL_TEMPLATE_VERSION=0.14.0 \
+    && export CONSUL_TEMPLATE_CHECKSUM=7c70ea5f230a70c809333e75fdcff2f6f1e838f29cfb872e1420a63cdf7f3a78 \
     && curl --retry 7 --fail -Lso /tmp/consul-template.zip "https://releases.hashicorp.com/consul-template/${CONSUL_TEMPLATE_VERSION}/consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip" \
     && echo "${CONSUL_TEMPLATE_CHECKSUM}  /tmp/consul-template.zip" | sha256sum -c \
     && unzip /tmp/consul-template.zip -d /usr/local/bin \

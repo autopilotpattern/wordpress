@@ -1,20 +1,10 @@
 {
-  "consul": "{{ .CONSUL }}:8500",
+  "consul": "{{ if .CONSUL_AGENT }}localhost{{ else }}{{ .CONSUL }}{{ end }}:8500",
   "preStart": "/usr/local/bin/prestart.sh",
   "services": [
     {
       "name": "wordpress",
       "port": 80,
-      "interfaces": [
-        "eth0",
-        "eth1[1]",
-        "192.168.0.0/16",
-        "2001:db8::/64",
-        "eth2:inet",
-        "eth2:inet6",
-        "inet",
-        "inet6"
-      ],
       "health": "/usr/local/bin/health.sh",
       "poll": 10,
       "ttl": 25
@@ -37,6 +27,17 @@
       "onChange": "/usr/local/bin/onchange-memcached.sh"
     }
   ],
+  "coprocesses": [{{ if .CONSUL_AGENT }}
+    {
+      "command": ["/usr/local/bin/consul", "agent",
+                  "-data-dir=/data",
+                  "-config-dir=/config",
+                  "-rejoin",
+                  "-retry-join", "{{ .CONSUL }}",
+                  "-retry-max", "10",
+                  "-retry-interval", "10s"],
+      "restarts": "unlimited"
+    }{{ end }}],
   "telemetry": {
     "port": 9090,
     "sensors": [

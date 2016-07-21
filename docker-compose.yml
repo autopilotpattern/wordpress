@@ -4,6 +4,8 @@ wordpress:
   restart: always
   mem_limit: 1g
   env_file: _env
+  environment:
+    - CONSUL_AGENT=1
   ports:
     - 80
     - 9090
@@ -19,6 +21,8 @@ nfs:
   restart: always
   mem_limit: 256m
   env_file: _env
+  environment:
+    - CONSUL_AGENT=1
   expose:
     - 111
     - 1892
@@ -35,6 +39,8 @@ mysql:
   restart: always
   mem_limit: 4g
   env_file: _env
+  environment:
+    - CONSUL_AGENT=1
   expose:
     - 3306
   labels:
@@ -47,6 +53,8 @@ memcached:
   restart: always
   mem_limit: 512m
   env_file: _env
+  environment:
+    - CONSUL_AGENT=1
   ports:
     - 11211
   labels:
@@ -62,6 +70,8 @@ nginx:
     - 80
     - 9090
   env_file: _env
+  environment:
+    - CONSUL_AGENT=1
   labels:
     - triton.cns.services=nginx
     - com.docker.swarm.affinities=["container!=~*nginx*"]

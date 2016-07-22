@@ -39,9 +39,10 @@ http {
 
         root /usr/share/nginx/html;
 
-        location /health.txt {
-            add_header content-type "text/html";
-            alias /usr/share/nginx/html/index.html;
+        location /nginx-health {
+            stub_status;
+            allow 127.0.0.1;
+            deny all;
         }
 
         {{ if service "wordpress" }}

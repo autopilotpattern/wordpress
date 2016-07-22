@@ -176,3 +176,12 @@ This project has been fully tested and documented to run in Docker in local deve
 ### Sponsors
 
 Initial development of this project was sponsored by [Joyent](https://www.joyent.com) and [10up](http://10up.com).
+
+### Building
+
+This image implements [microbadger.com](https://microbadger.com/#/labels) label schema, but those labels require additional build args:
+
+```
+docker build --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
+               --build-arg VCS_REF=`git rev-parse --short HEAD` .
+```

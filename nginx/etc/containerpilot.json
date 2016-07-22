@@ -1,21 +1,50 @@
 {
-  "backends": [
-    {
-      "onChange": "/usr/local/bin/reload.sh",
-      "poll": 5,
-      "name": "wordpress"
-    }
-  ],
+  "consul": "{{ if .CONSUL_AGENT }}localhost{{ else }}{{ .CONSUL }}{{ end }}:8500",
+  "preStart": "/usr/local/bin/reload.sh preStart",
   "services": [
     {
-      "ttl": 25,
-      "poll": 10,
-      "health": "/usr/bin/curl --fail -s http://localhost/health.txt",
-      "publicIp": true,
+      "name": "nginx",
       "port": 80,
-      "name": "nginx"
+      "health": "/usr/bin/curl --fail -s http://localhost/nginx-health",
+      "poll": 10,
+      "ttl": 25
     }
   ],
-  "preStart": "/usr/local/bin/reload.sh preStart",
-  "consul": "{{.CONSUL}}:8500"
+  "backends": [
+    {
+      "name": "wordpress",
+      "poll": 7,
+      "onChange": "/usr/local/bin/reload.sh"
+    }
+  ],
+  "coprocesses": [{{ if .CONSUL_AGENT }}
+    {
+      "command": ["/usr/local/bin/consul", "agent",
+                  "-data-dir=/data",
+                  "-config-dir=/config",
+                  "-rejoin",
+                  "-retry-join", "{{ .CONSUL }}",
+                  "-retry-max", "10",
+                  "-retry-interval", "10s"],
+      "restarts": "unlimited"
+    }{{ end }}],
+  "telemetry": {
+    "port": 9090,
+    "sensors": [
+      {
+        "name": "nginx_connections_unhandled_total",
+        "help": "Number of accepted connnections that were not handled",
+        "type": "gauge",
+        "poll": 5,
+        "check": ["/usr/local/bin/sensor.sh", "unhandled"]
+      },
+      {
+        "name": "nginx_connections_load",
+        "help": "Ratio of active connections (less waiting) to the maximum worker connections",
+        "type": "gauge",
+        "poll": 5,
+        "check": ["/usr/local/bin/sensor.sh", "connections_load"]
+      }
+    ]
+  }
 }

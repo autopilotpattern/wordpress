@@ -1,17 +1,5 @@
 FROM php:5.6-apache
 
-# Build-time metadata as defined at http://label-schema.org
-# with added usage described in https://microbadger.com/#/labels
-ARG BUILD_DATE
-ARG VCS_REF
-LABEL org.label-schema.build-date=$BUILD_DATE \
-    org.label-schema.docker.dockerfile="/Dockerfile" \
-    org.label-schema.name="Autopilot Pattern WordPress" \
-    org.label-schema.url="https://github.com/autopilotpattern/wordpress" \
-    org.label-schema.vcs-ref=$VCS_REF \
-    org.label-schema.vcs-type="Git" \
-    org.label-schema.vcs-url="https://github.com/autopilotpattern/wordpress"
-
 RUN a2enmod rewrite
 
 # Install the PHP extensions we need, and other packages

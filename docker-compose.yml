@@ -17,7 +17,7 @@ wordpress:
 
 # NFS is used to store user uploads
 nfs:
-  image: autopilotpattern/nfsserver:0.1.0-r2
+  image: autopilotpattern/nfsserver:latest
   restart: always
   mem_limit: 256m
   env_file: _env
@@ -49,7 +49,7 @@ mysql:
 
 # Memcached is a high performance object cache
 memcached:
-  image: autopilotpattern/memcached:1.4-alpine-r1
+  image: autopilotpattern/memcached:latest
   restart: always
   mem_limit: 512m
   env_file: _env
@@ -63,7 +63,7 @@ memcached:
 
 # Nginx as a load-balancing tier and reverse proxy
 nginx:
-  image: autopilotpattern/wordpress-nginx:4.5.3-r1
+  image: autopilotpattern/wordpress-nginx:latest
   restart: always
   mem_limit: 512m
   ports:
@@ -78,19 +78,17 @@ nginx:
 
 # Consul is the service catalog that helps discovery between the components
 consul:
-  image: progrium/consul:latest
-  command: -server -bootstrap -ui-dir /ui
+  image: autopilotpattern/consul:latest
+  command: >
+    /usr/local/bin/containerpilot
+    /bin/consul agent -server
+    -bootstrap-expect 1
+    -config-dir=/etc/consul
+    -ui-dir /ui
   restart: always
   mem_limit: 128m
   env_file: _env
   ports:
-    - 8500
-  expose:
-    - 53
-    - 8300
-    - 8301
-    - 8302
-    - 8400
     - 8500
   dns:
     - 127.0.0.1

@@ -17,7 +17,7 @@ wordpress:
 
 # NFS is used to store user uploads
 nfs:
-  image: autopilotpattern/nfsserver:latest
+  image: autopilotpattern/nfsserver:0.1.0-r2
   restart: always
   mem_limit: 256m
   env_file: _env
@@ -49,7 +49,7 @@ mysql:
 
 # Memcached is a high performance object cache
 memcached:
-  image: autopilotpattern/memcached:latest
+  image: autopilotpattern/memcached:1.4-alpine-r1
   restart: always
   mem_limit: 512m
   env_file: _env
@@ -63,7 +63,7 @@ memcached:
 
 # Nginx as a load-balancing tier and reverse proxy
 nginx:
-  image: autopilotpattern/wordpress-nginx:latest
+  image: autopilotpattern/wordpress-nginx:4.5.3-r1
   restart: always
   mem_limit: 512m
   ports:

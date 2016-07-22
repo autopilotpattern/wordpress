@@ -77,12 +77,14 @@ nginx:
     - com.docker.swarm.affinities=["container!=~*nginx*"]
 
 # Consul is the service catalog that helps discovery between the components
+# Change "-bootstrap" to "-bootstrap-expect 3", then scale to 3 or more to 
+# turn this into an HA Consul raft.
 consul:
   image: autopilotpattern/consul:latest
   command: >
     /usr/local/bin/containerpilot
     /bin/consul agent -server
-    -bootstrap-expect 1
+    -bootstrap
     -config-dir=/etc/consul
     -ui-dir /ui
   restart: always

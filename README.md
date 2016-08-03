@@ -25,6 +25,7 @@ A running cluster includes the following components:
 - [NFS](https://github.com/autpilotpattern/nfsserver/): stores user uploaded files so these files can be shared between many WordPress containers
 - [Consul](https://www.consul.io/): used to coordinate replication and failover
 - [Manta](https://www.joyent.com/object-storage): the Joyent object store, for securely and durably storing our MySQL snapshots
+- [Prometheus](https://github.com/autopilotpattern/prometheus): an optional, [open source monitoring tool](https://prometheus.io) that tracks the performance of each component and demonstrates [ContainerPilot telemetry](https://www.joyent.com/blog/containerpilot-telemetry)
 - [WP-CLI](http://wp-cli.org/): to make managing WordPress easier
 
 ### How do I use this thing?

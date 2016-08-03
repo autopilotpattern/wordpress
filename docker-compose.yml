@@ -15,6 +15,28 @@ wordpress:
     # Soft anti-affinity to avoid other WordPress instances
     - com.docker.swarm.affinities=["container!=~*wordpress*"]
 
+# Consul is the service catalog that helps discovery between the components
+# Change "-bootstrap" to "-bootstrap-expect 3", then scale to 3 or more to 
+# turn this into an HA Consul raft.
+consul:
+  image: autopilotpattern/consul:latest
+  command: >
+    /usr/local/bin/containerpilot
+    /bin/consul agent -server
+    -bootstrap
+    -config-dir=/etc/consul
+    -ui-dir /ui
+  restart: always
+  mem_limit: 128m
+  env_file: _env
+  ports:
+    - 8500
+  dns:
+    - 127.0.0.1
+  labels:
+    - triton.cns.services=consul
+    - com.docker.swarm.affinities=["container!=~*"]
+
 # NFS is used to store user uploads
 nfs:
   image: autopilotpattern/nfsserver:latest
@@ -76,24 +98,15 @@ nginx:
     - triton.cns.services=nginx
     - com.docker.swarm.affinities=["container!=~*nginx*"]
 
-# Consul is the service catalog that helps discovery between the components
-# Change "-bootstrap" to "-bootstrap-expect 3", then scale to 3 or more to 
-# turn this into an HA Consul raft.
-consul:
-  image: autopilotpattern/consul:latest
-  command: >
-    /usr/local/bin/containerpilot
-    /bin/consul agent -server
-    -bootstrap
-    -config-dir=/etc/consul
-    -ui-dir /ui
+# Prometheus is an open source performance monitoring tool
+# it is included here for demo purposes and is not required
+prometheus:
+  image: autopilotpattern/prometheus:latest
   restart: always
-  mem_limit: 128m
+  mem_limit: 1g
   env_file: _env
   ports:
-    - 8500
-  dns:
-    - 127.0.0.1
+    - 9090
   labels:
-    - triton.cns.services=consul
-    - com.docker.swarm.affinities=["container!=~*"]
+    - triton.cns.services=prometheus
+    - com.docker.swarm.affinities=["container!=~*prometheus*"]

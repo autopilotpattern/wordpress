@@ -1,3 +1,5 @@
+# See docker-compose.yml for further descriptions and configuration details of each service
+
 wordpress:
   extends:
     file: docker-compose.yml
@@ -11,6 +13,14 @@ wordpress:
     - consul:consul
   ports:
     - "80"
+
+consul:
+  extends:
+    file: docker-compose.yml
+    service: consul
+  restart: never
+  ports:
+    - 8500:8500
 
 nfs:
   extends:
@@ -49,7 +59,6 @@ memcached:
   links:
     - consul:consul
 
-# Nginx as a load-balancing tier and reverse proxy
 nginx:
   extends:
     file: docker-compose.yml
@@ -63,10 +72,14 @@ nginx:
   ports:
     - 80:80
 
-consul:
+prometheus:
   extends:
     file: docker-compose.yml
-    service: consul
+    service: prometheus
   restart: never
+  environment:
+    - CONSUL=consul
+  links:
+    - consul:consul
   ports:
-    - 8500:8500
+    - 9090:9090

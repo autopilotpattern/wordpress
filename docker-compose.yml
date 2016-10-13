@@ -85,11 +85,12 @@ memcached:
 
 # Nginx as a load-balancing tier and reverse proxy
 nginx:
-  image: autopilotpattern/wordpress-nginx:latest
+  image: autopilotpattern/wordpress-nginx:branch-jasonpincin-issue-33
   restart: always
   mem_limit: 512m
   ports:
     - 80
+    - 443
     - 9090
   env_file: _env
   environment:

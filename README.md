@@ -20,7 +20,7 @@ A running cluster includes the following components:
 - [HyperDB](https://wordpress.org/plugins/hyperdb/): an "advanced database class that replaces a few of the WordPress built-in database functions" to support the MySQL cluster that's necessary for scaling WordPress; everything is automatically configured so running a scalable WordPress site is no more complex than running without the scaling features
 - [Memcached](https://github.com/autpilotpattern/memcached/): improves performance by keeping frequently accessed data in memory so WordPress doesn't have to query the database for every request; the images include [tollmanz's Memcached plugin](https://github.com/tollmanz/wordpress-pecl-memcached-object-cache) pre-installed, and ContainerPilot automatically configures it as we scale
 - [Nginx](https://github.com/autopilotpattern/nginx): the front-end load balancer for the WordPress environment; passes traffic from users to the WordPress containers on the back-end
-- [NFS](https://github.com/autpilotpattern/nfsserver/): stores user uploaded files so these files can be shared between many WordPress containers
+- [NFS](https://github.com/autopilotpattern/nfsserver/): stores user uploaded files so these files can be shared between many WordPress containers
 - [Consul](https://www.consul.io/): used to coordinate replication and failover
 - [Manta](https://www.joyent.com/object-storage): the Joyent object store, for securely and durably storing our MySQL snapshots
 - [Prometheus](https://github.com/autopilotpattern/prometheus): an optional, [open source monitoring tool](https://prometheus.io) that tracks the performance of each component and demonstrates [ContainerPilot telemetry](https://www.joyent.com/blog/containerpilot-telemetry)

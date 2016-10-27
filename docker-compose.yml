@@ -1,6 +1,8 @@
 # An demo version of WordPress for easy scaling
 wordpress:
-  image: autopilotpattern/wordpress:latest
+  #image: autopilotpattern/wordpress:latest
+  image: jasondewitt/autopilotwordpress:latest
+  #build: .
   restart: always
   mem_limit: 1g
   env_file: _env
@@ -16,7 +18,7 @@ wordpress:
     - com.docker.swarm.affinities=["container!=~*wordpress*"]
 
 # Consul is the service catalog that helps discovery between the components
-# Change "-bootstrap" to "-bootstrap-expect 3", then scale to 3 or more to 
+# Change "-bootstrap" to "-bootstrap-expect 3", then scale to 3 or more to
 # turn this into an HA Consul raft.
 consul:
   image: autopilotpattern/consul:latest
@@ -85,7 +87,8 @@ memcached:
 
 # Nginx as a load-balancing tier and reverse proxy
 nginx:
-  image: autopilotpattern/wordpress-nginx:branch-jasonpincin-issue-33
+  #image: autopilotpattern/wordpress-nginx:branch-jasonpincin-issue-33
+  image: jasondewitt/wordpress-nginx:branch-wpsslfix
   restart: always
   mem_limit: 512m
   ports:

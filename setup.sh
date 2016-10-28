@@ -138,6 +138,13 @@ envcheck() {
         echo 'WORDPRESS_NONCE_SALT='$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 53) >> _env
         echo >> _env
 
+        echo '# Nginx LetsEncrypt (ACME) config' >> _env
+        echo '# be sure ACME_DOMAIN host and WORDPRESS_URL host are the same, if using automated SSL via LetsEncrypt' >> _env
+        echo '# ACME_ENV defaults to "staging", uncomment following ACME_ENV line to switch to LetsEncrypt production endpoint' >> _env
+        echo '#ACME_DOMAIN='nginx.svc.${TRITON_ACCOUNT}.${TRITON_DC}.triton.zone >> _env
+        echo '#ACME_ENV=production' >> _env
+        echo >> _env
+
         echo '# Environment variables for MySQL service' >> _env
         echo '# WordPress database/WPDB information' >> _env
         echo 'MYSQL_USER=wpdbuser' >> _env

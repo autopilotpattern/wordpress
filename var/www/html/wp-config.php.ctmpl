@@ -21,8 +21,10 @@ define( 'DB_HOST',     '{{if service "mysql-primary"}}{{with index (service "mys
 /**
  * Handle SSL reverse proxy
  */
-if ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')
+if ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') 
+{
     $_SERVER['HTTPS']='on';
+}
     
 /**
  * Custom Content Directory

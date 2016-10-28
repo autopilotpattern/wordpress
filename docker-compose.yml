@@ -1,8 +1,6 @@
 # An demo version of WordPress for easy scaling
 wordpress:
-  #image: autopilotpattern/wordpress:latest
-  image: jasondewitt/autopilotwordpress:latest
-  #build: .
+  image: autopilotpattern/wordpress:branch-jasonpincin-issue-33
   restart: always
   mem_limit: 1g
   env_file: _env
@@ -87,8 +85,7 @@ memcached:
 
 # Nginx as a load-balancing tier and reverse proxy
 nginx:
-  #image: autopilotpattern/wordpress-nginx:branch-jasonpincin-issue-33
-  image: jasondewitt/wordpress-nginx:branch-wpsslfix
+  image: autopilotpattern/wordpress-nginx:branch-jasonpincin-issue-33
   restart: always
   mem_limit: 512m
   ports:
@@ -98,6 +95,7 @@ nginx:
   env_file: _env
   environment:
     - CONSUL_AGENT=1
+    - ACME_DOMAIN=joyent.pincin.me
   labels:
     - triton.cns.services=nginx
     - com.docker.swarm.affinities=["container!=~*nginx*"]

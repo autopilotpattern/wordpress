@@ -19,6 +19,14 @@ define( 'DB_PASSWORD', '{{env "MYSQL_PASSWORD"}}' );
 define( 'DB_HOST',     '{{if service "mysql-primary"}}{{with index (service "mysql-primary") 0}}{{.Address}}:{{.Port}}{{end}}{{end}}' );
 
 /**
+ * Handle SSL reverse proxy
+ */
+if ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') 
+{
+    $_SERVER['HTTPS']='on';
+}
+    
+/**
  * Custom Content Directory
  */
 define( 'WP_CONTENT_DIR', dirname( __FILE__ ) . '/content' );

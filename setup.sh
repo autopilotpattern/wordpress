@@ -14,6 +14,12 @@ help() {
     echo 'Additional details must be configured in the _env file, but this script will properly'
     echo 'encode the SSH key details for use with this this project.'
     echo
+    echo '-'
+    echo
+    echo 'Usage ./setup.sh get-cns-hostname'
+    echo
+    echo 'Output the CNS hostname suitable for aliasing in DNS for custom domain names.'
+    echo
 }
 
 
@@ -24,6 +30,13 @@ TRITON_ACCOUNT=
 
 # ---------------------------------------------------
 # Top-level commands
+
+# Output aliasable CNS hostname
+get-cns-hostname() {
+    TRITON_DC=$(triton profile get | awk -F"/" '/url:/{print $3}' | awk -F'.' '{print $1}')
+    TRITON_ACCOUNT=$(triton account get | awk -F": " '/id:/{print $2}')
+    echo "nginx.svc.${TRITON_ACCOUNT}.${TRITON_DC}.cns.joyent.com"
+}
 
 # Check for correct configuration and setup _env file
 envcheck() {
@@ -106,6 +119,8 @@ envcheck() {
         tput rev  # reverse
         tput bold # bold
         echo 'Error! Triton CNS is required and not enabled.'
+        echo 'Consider running:'
+        echo '  triton account update triton_cns_enabled=true'
         tput sgr0 # clear
         echo
         exit 1

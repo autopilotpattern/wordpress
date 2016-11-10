@@ -119,9 +119,10 @@ envcheck() {
         tput rev  # reverse
         tput bold # bold
         echo 'Error! Triton CNS is required and not enabled.'
+        tput sgr0 # clear
+        echo
         echo 'Consider running:'
         echo '  triton account update triton_cns_enabled=true'
-        tput sgr0 # clear
         echo
         exit 1
     fi

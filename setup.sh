@@ -150,8 +150,8 @@ envcheck() {
 
         echo '# Environment variables for backups to Manta' >> _env
         echo 'MANTA_URL=https://us-east.manta.joyent.com' >> _env
-        echo 'MANTA_BUCKET= # an existing Manta bucket' >> _env
-        echo 'MANTA_USER= # a user with access to that bucket' >> _env
+        echo 'MANTA_BUCKET=/<username>/stor/<bucketname>' >> _env
+        echo 'MANTA_USER=<username>' >> _env
         echo 'MANTA_SUBUSER=' >> _env
         echo 'MANTA_ROLE=' >> _env
 

@@ -55,8 +55,8 @@ Check that everything is configured correctly by running `./setup.sh`. You'll ne
 The script will set defaults for almost every config variable, but the Manta config is required and must be set manually. The two most important variables there are:
 
 ```
-MANTA_BUCKET= # an existing Manta bucket
-MANTA_USER= # a user with access to that bucket
+MANTA_BUCKET=/<username>/stor/<bucketname>  # an existing Manta bucket
+MANTA_USER=<username> # a user with access to that bucket
 ```
 
 The MySQL container will take a backup during its `preStart` handler and periodically while running. Configure these Manta settings to specify how and where this backup is stored. Here you need to specify the `MANTA_USER`, and also the `MANTA_BUCKET` where the backups will be stored.

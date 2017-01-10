@@ -1,4 +1,4 @@
-# AutoPilot Pattern WordPress
+# Autopilot Pattern WordPress
 
 *A robust and highly-scalable implementation of WordPress in Docker using the Autopilot Pattern*
 

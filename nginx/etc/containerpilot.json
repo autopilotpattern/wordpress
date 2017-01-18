@@ -1,14 +1,32 @@
 {
   "consul": "{{ if .CONSUL_AGENT }}localhost{{ else }}{{ .CONSUL }}{{ end }}:8500",
   "preStart": "/usr/local/bin/reload.sh preStart",
+  "logging": {"level": "DEBUG"},
   "services": [
     {
       "name": "nginx",
       "port": 80,
-      "health": "/usr/bin/curl --fail -s http://localhost/nginx-health",
+      "health": "/usr/bin/curl --fail --silent --show-error --output /dev/null http://localhost/nginx-health",
       "poll": 10,
-      "ttl": 25
-    }
+      "ttl": 25,
+      "interfaces": ["eth0"]
+    },
+    {
+      "name": "nginx-public",
+      "port": 80,
+      "health": "/usr/bin/curl --fail --silent --show-error --output /dev/null http://localhost/nginx-health",
+      "poll": 10,
+      "ttl": 25,
+      "interfaces": ["eth1", "eth0"]
+    }{{ if .ACME_DOMAIN }},
+    {
+      "name": "nginx-public-ssl",
+      "port": 443,
+      "health": "/usr/local/bin/acme init && /usr/bin/curl --insecure --fail --silent --show-error --output /dev/null --header \"HOST: {{ .ACME_DOMAIN }}\" https://localhost/nginx-health",
+      "poll": 10,
+      "ttl": 25,
+      "interfaces": ["eth1", "eth0"]
+    }{{ end }}
   ],
   "backends": [
     {
@@ -26,6 +44,14 @@
                   "-retry-join", "{{ .CONSUL }}",
                   "-retry-max", "10",
                   "-retry-interval", "10s"],
+      "restarts": "unlimited"
+    }{{ end }}
+    {{ if and .CONSUL_AGENT .ACME_DOMAIN }},{{ end }}
+    {{ if .ACME_DOMAIN }}
+    {
+      "command": ["/usr/local/bin/consul-template",
+                  "-config", "/etc/acme/watch.hcl",
+                  "-consul", "{{ if .CONSUL_AGENT }}localhost{{ else }}{{ .CONSUL }}{{ end }}:8500"],
       "restarts": "unlimited"
     }{{ end }}],
   "telemetry": {
@@ -46,5 +72,25 @@
         "check": ["/usr/local/bin/sensor.sh", "connections_load"]
       }
     ]
-  }
+  },
+  "tasks": [{{ if .ACME_DOMAIN }}
+    {
+      "name": "acme-checkin",
+      "command": [ "/usr/local/bin/acme", "checkin" ],
+      "frequency": "5m",
+      "timeout": "10s"
+    },
+    {
+      "name": "acme-renew-certs",
+      "command": [ "/usr/local/bin/acme", "renew-certs" ],
+      "frequency": "12h",
+      "timeout": "10m"
+    },
+    {
+      "name": "clean-unused-certs",
+      "command": ["/usr/local/bin/acme", "clean-certs" ],
+      "frequency": "24h",
+      "timeout": "10m"
+    }{{ end }}
+  ]
 }

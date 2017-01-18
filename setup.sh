@@ -14,6 +14,12 @@ help() {
     echo 'Additional details must be configured in the _env file, but this script will properly'
     echo 'encode the SSH key details for use with this this project.'
     echo
+    echo '-'
+    echo
+    echo 'Usage ./setup.sh get-cns-hostname'
+    echo
+    echo 'Output the CNS hostname suitable for aliasing in DNS for custom domain names.'
+    echo
 }
 
 
@@ -24,6 +30,13 @@ TRITON_ACCOUNT=
 
 # ---------------------------------------------------
 # Top-level commands
+
+# Output aliasable CNS hostname
+get-cns-hostname() {
+    TRITON_DC=$(triton profile get | awk -F"/" '/url:/{print $3}' | awk -F'.' '{print $1}')
+    TRITON_ACCOUNT=$(triton account get | awk -F": " '/id:/{print $2}')
+    echo "nginx.svc.${TRITON_ACCOUNT}.${TRITON_DC}.cns.joyent.com"
+}
 
 # Check for correct configuration and setup _env file
 envcheck() {
@@ -108,6 +121,9 @@ envcheck() {
         echo 'Error! Triton CNS is required and not enabled.'
         tput sgr0 # clear
         echo
+        echo 'Consider running:'
+        echo '  triton account update triton_cns_enabled=true'
+        echo
         exit 1
     fi
 
@@ -138,6 +154,13 @@ envcheck() {
         echo 'WORDPRESS_NONCE_SALT='$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 53) >> _env
         echo >> _env
 
+        echo '# Nginx LetsEncrypt (ACME) config' >> _env
+        echo '# be sure ACME_DOMAIN host and WORDPRESS_URL host are the same, if using automated SSL via LetsEncrypt' >> _env
+        echo '# ACME_ENV defaults to "staging", uncomment following ACME_ENV line to switch to LetsEncrypt production endpoint' >> _env
+        echo '#ACME_DOMAIN='nginx.svc.${TRITON_ACCOUNT}.${TRITON_DC}.triton.zone >> _env
+        echo '#ACME_ENV=production' >> _env
+        echo >> _env
+
         echo '# Environment variables for MySQL service' >> _env
         echo '# WordPress database/WPDB information' >> _env
         echo 'MYSQL_USER=wpdbuser' >> _env
@@ -150,8 +173,8 @@ envcheck() {
 
         echo '# Environment variables for backups to Manta' >> _env
         echo 'MANTA_URL=https://us-east.manta.joyent.com' >> _env
-        echo 'MANTA_BUCKET= # an existing Manta bucket' >> _env
-        echo 'MANTA_USER= # a user with access to that bucket' >> _env
+        echo 'MANTA_BUCKET=/<username>/stor/<bucketname> # an existing Manta bucket' >> _env
+        echo 'MANTA_USER=<username> # a user with access to that bucket' >> _env
         echo 'MANTA_SUBUSER=' >> _env
         echo 'MANTA_ROLE=' >> _env
 

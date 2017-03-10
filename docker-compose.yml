@@ -35,6 +35,7 @@ consul:
     - 127.0.0.1
   labels:
     - triton.cns.services=consul
+    # Soft anti-affinity to avoid all other containers
     - com.docker.swarm.affinities=["container!=~*"]
     - com.joyent.package=g4-highcpu-128M
 

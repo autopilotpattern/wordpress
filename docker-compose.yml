@@ -1,6 +1,6 @@
 # An demo version of WordPress for easy scaling
 wordpress:
-  image: autopilotpattern/wordpress:latest
+  image: autopilotpattern/wordpress:4.7.3-r4.0.0
   restart: always
   env_file: _env
   environment:
@@ -10,7 +10,7 @@ wordpress:
     - 9090
   labels:
     # Setting the CNS service name
-    - triton.cns.services=wordpress
+    - triton.cns.services=wp-wordpress
     # Soft anti-affinity to avoid other WordPress instances
     - com.docker.swarm.affinities=["container!=~*wordpress*"]
     # Set the package
@@ -34,7 +34,7 @@ consul:
   dns:
     - 127.0.0.1
   labels:
-    - triton.cns.services=consul
+    - triton.cns.services=wp-consul
     # Soft anti-affinity to avoid all other containers
     - com.docker.swarm.affinities=["container!=~*"]
     - com.joyent.package=g4-highcpu-128M
@@ -51,7 +51,7 @@ nfs:
     - 1892
     - 2049
   labels:
-    - triton.cns.services=nfs
+    - triton.cns.services=wp-nfs
     - com.docker.swarm.affinities=["container!=~*"]
     - com.joyent.package=g4-highcpu-256M
 
@@ -66,7 +66,7 @@ mysql:
   expose:
     - 3306
   labels:
-    - triton.cns.services=mysql
+    - triton.cns.services=wp-mysql
     - com.docker.swarm.affinities=["container!=~*mysql*"]
     - com.joyent.package=g4-highcpu-4G
 
@@ -80,13 +80,13 @@ memcached:
   ports:
     - 11211
   labels:
-    - triton.cns.services=memcached
+    - triton.cns.services=wp-memcached
     - com.docker.swarm.affinities=["container!=~*memcached*"]
     - com.joyent.package=g4-highcpu-512M
 
 # Nginx as a load-balancing tier and reverse proxy
 nginx:
-  image: autopilotpattern/wordpress-nginx:latest
+  image: autopilotpattern/wordpress-nginx:4.7.3-r4.0.0
   restart: always
   ports:
     - 80
@@ -96,7 +96,7 @@ nginx:
   environment:
     - CONSUL_AGENT=1
   labels:
-    - triton.cns.services=nginx
+    - triton.cns.services=wp-nginx, nginx
     - com.docker.swarm.affinities=["container!=~*nginx*"]
     - com.joyent.package=g4-highcpu-512M
 
@@ -109,6 +109,6 @@ prometheus:
   ports:
     - 9090
   labels:
-    - triton.cns.services=prometheus
+    - triton.cns.services=wp-prometheus
     - com.docker.swarm.affinities=["container!=~*prometheus*"]
     - com.joyent.package=g4-highcpu-1G

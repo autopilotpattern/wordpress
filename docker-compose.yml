@@ -96,7 +96,7 @@ nginx:
   environment:
     - CONSUL_AGENT=1
   labels:
-    - triton.cns.services=wp-nginx, nginx
+    - triton.cns.services=wp-nginx,nginx
     - com.docker.swarm.affinities=["container!=~*nginx*"]
     - com.joyent.package=g4-highcpu-512M
 

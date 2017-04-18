@@ -196,7 +196,7 @@ envcheck() {
         echo >> _env
 
         echo '# Consul discovery via Triton CNS' >> _env
-        echo CONSUL=consul.svc.${TRITON_ACCOUNT}.${TRITON_DC}.cns.joyent.com >> _env
+        echo CONSUL=wp-consul.svc.${TRITON_ACCOUNT}.${TRITON_DC}.cns.joyent.com >> _env
         echo >> _env
 
         echo 'Edit the _env file to confirm and set your desired configuration details'

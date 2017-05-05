@@ -6,7 +6,7 @@ wordpress:
     service: wordpress
   build: .
   privileged: true
-  restart: never
+  restart: "no"
   environment:
     - CONSUL=consul
   links:
@@ -18,7 +18,7 @@ consul:
   extends:
     file: docker-compose.yml
     service: consul
-  restart: never
+  restart: "no"
   ports:
     - 8500:8500
 
@@ -27,7 +27,7 @@ nfs:
     file: docker-compose.yml
     service: nfs
   privileged: true
-  restart: never
+  restart: "no"
   environment:
     - CONSUL=consul
   links:
@@ -41,7 +41,7 @@ mysql:
   extends:
     file: docker-compose.yml
     service: mysql
-  restart: never
+  restart: "no"
   environment:
     - CONSUL=consul
   links:
@@ -53,7 +53,7 @@ memcached:
   extends:
     file: docker-compose.yml
     service: memcached
-  restart: never
+  restart: "no"
   environment:
     - CONSUL=consul
   links:
@@ -64,7 +64,7 @@ nginx:
     file: docker-compose.yml
     service: nginx
   build: nginx/
-  restart: never
+  restart: "no"
   environment:
     - CONSUL=consul
   links:
@@ -76,7 +76,7 @@ prometheus:
   extends:
     file: docker-compose.yml
     service: prometheus
-  restart: never
+  restart: "no"
   environment:
     - CONSUL=consul
   links:

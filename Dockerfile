@@ -38,11 +38,11 @@ COPY etc /etc
 
 # Add Containerpilot and its configuration
 # Releases at https://github.com/joyent/containerpilot/releases
-ENV CONTAINERPILOT_VER 2.7.2
+ENV CONTAINERPILOT_VER 2.7.3
 ENV CONTAINERPILOT file:///etc/containerpilot.json
 
 RUN set -ex \
-    && export CONTAINERPILOT_CHECKSUM=e886899467ced6d7c76027d58c7f7554c2fb2bcc \
+    && export CONTAINERPILOT_CHECKSUM=2511fdfed9c6826481a9048e8d34158e1d7728bf \
     && curl --retry 7 --fail -Lso /tmp/containerpilot.tar.gz \
          "https://github.com/joyent/containerpilot/releases/download/${CONTAINERPILOT_VER}/containerpilot-${CONTAINERPILOT_VER}.tar.gz" \
     && echo "${CONTAINERPILOT_CHECKSUM}  /tmp/containerpilot.tar.gz" | sha1sum -c \
@@ -63,8 +63,8 @@ RUN set -ex \
 # Install Consul template
 # Releases at https://releases.hashicorp.com/consul-template/
 RUN set -ex \
-    && export CONSUL_TEMPLATE_VERSION=0.18.2 \
-    && export CONSUL_TEMPLATE_CHECKSUM=6fee6ab68108298b5c10e01357ea2a8e4821302df1ff9dd70dd9896b5c37217c \
+    && export CONSUL_TEMPLATE_VERSION=0.18.3 \
+    && export CONSUL_TEMPLATE_CHECKSUM=caf6018d7489d97d6cc2a1ac5f1cbd574c6db4cd61ed04b22b8db7b4bde64542 \
     && curl --retry 7 --fail -Lso /tmp/consul-template.zip "https://releases.hashicorp.com/consul-template/${CONSUL_TEMPLATE_VERSION}/consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip" \
     && echo "${CONSUL_TEMPLATE_CHECKSUM}  /tmp/consul-template.zip" | sha256sum -c \
     && unzip /tmp/consul-template.zip -d /usr/local/bin \
@@ -84,7 +84,8 @@ COPY /var/www/html /var/www/html
 RUN chown -R www-data:www-data /var/www/html/*
 
 # Install WordPress via wp-cli & move the default themes to our content dir
-ENV WORDPRESS_VERSION 4.7.3
+# Releases at https://core.svn.wordpress.org/tags/ and https://wordpress.org/news/category/releases/
+ENV WORDPRESS_VERSION 4.7.5
 RUN set -ex \
     && wp --allow-root core download --version=${WORDPRESS_VERSION} \
     && mv /var/www/html/wordpress/wp-content/themes/* /var/www/html/content/themes/

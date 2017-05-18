@@ -1,6 +1,6 @@
 {
   "consul": "{{ if .CONSUL_AGENT }}localhost{{ else }}{{ .CONSUL }}{{ end }}:8500",
-  "preStart": "/usr/local/bin/reload.sh preStart",
+  "preStart": "generate-config",
   "logging": {"level": "DEBUG"},
   "services": [
     {
@@ -32,7 +32,7 @@
     {
       "name": "wordpress",
       "poll": 7,
-      "onChange": "/usr/local/bin/reload.sh"
+      "onChange": "reload"
     }
   ],
   "coprocesses": [{{ if .CONSUL_AGENT }}
@@ -62,14 +62,14 @@
         "help": "Number of accepted connnections that were not handled",
         "type": "gauge",
         "poll": 5,
-        "check": ["/usr/local/bin/sensor.sh", "unhandled"]
+        "check": ["sensor", "unhandled"]
       },
       {
         "name": "nginx_connections_load",
         "help": "Ratio of active connections (less waiting) to the maximum worker connections",
         "type": "gauge",
         "poll": 5,
-        "check": ["/usr/local/bin/sensor.sh", "connections_load"]
+        "check": ["sensor", "connections_load"]
       }
     ]
   },

@@ -1,6 +1,6 @@
 # An demo version of WordPress for easy scaling
 wordpress:
-  image: autopilotpattern/wordpress:branch-add-makefile
+  image: autopilotpattern/wordpress:latest
   restart: always
   env_file: _env
   environment:
@@ -86,7 +86,7 @@ memcached:
 
 # Nginx as a load-balancing tier and reverse proxy
 nginx:
-  image: autopilotpattern/wordpress-nginx:branch-add-makefile
+  image: autopilotpattern/wordpress-nginx:latest
   restart: always
   ports:
     - 80

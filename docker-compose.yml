@@ -86,7 +86,7 @@ memcached:
 
 # Nginx as a load-balancing tier and reverse proxy
 nginx:
-  image: autopilotpattern/wordpress-nginx:latest
+  image: autopilotpattern/wordpress-nginx:branch-acme-fix
   restart: always
   ports:
     - 80
